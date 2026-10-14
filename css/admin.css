@@ -3,10 +3,10 @@
    Misma paleta de medianoche de la tienda, pero sobria y de uso rápido.
    ========================================================= */
 :root{
-  --bg:#06060B;--bg-2:#0B0B14;--surface:#10101B;--surface-2:#171726;
-  --fg:#ECE8F3;--muted:#8C88A1;--gold:#E2C084;--on-gold:#0B0910;
-  --line:rgba(236,232,243,.1);--line-strong:rgba(236,232,243,.22);
-  --ok:#8FD3B0;--warn:#F0B37A;--bad:#F08A8A;--mod:#6E5BD6;
+  --bg:#09040F;--bg-2:#10081D;--surface:#170B2A;--surface-2:#221240;
+  --fg:#F3ECFC;--muted:#A798C8;--gold:#DDB968;--on-gold:#12091F;
+  --line:rgba(215,196,250,.12);--line-strong:rgba(215,196,250,.26);
+  --ok:#8FD3B0;--warn:#F0B37A;--bad:#F08A8A;--mod:#8A46F0;
   --f-display:'Bodoni Moda','Didot',Georgia,serif;
   --f-sans:'Jost','Futura','Century Gothic','Helvetica Neue',Arial,sans-serif;
   --gl:max(14px,env(safe-area-inset-left,0px));--gr:max(14px,env(safe-area-inset-right,0px));
@@ -122,3 +122,12 @@ svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation-duration:2s!important}}
 .pie[hidden]{display:none}
+
+/* fotos en lote */
+.lote-acc{flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;margin:10px 0}
+.lote-acc .btn{min-height:44px;padding:0 20px;font-size:12px}
+.lote-res{font-size:14px;color:var(--muted);margin:8px 0 0;max-height:34dvh;overflow:auto}
+.lote-res b{color:var(--fg);font-weight:400}.lote-res .si{color:var(--ok)}.lote-res .no{color:var(--warn)}
+.lote-res ul{margin:6px 0 0;padding-left:18px;font-size:13px;word-break:break-all}
+.barra-lote{height:4px;background:var(--line);border-radius:2px;margin-top:10px;overflow:hidden}
+.barra-lote i{display:block;height:100%;width:0;background:var(--gold);transition:width .2s}

@@ -325,7 +325,7 @@
     clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2200);
   }
 
-  // ---------- cielo estrellado del hero ----------
+  // ---------- polvo de lavanda del hero ----------
   function prepararCielo() {
     const cv = $('#cielo'); if (!cv || !cv.getContext) return;
     const ctx = cv.getContext('2d');
@@ -339,7 +339,7 @@
       estrellas = Array.from({ length: n }, () => ({
         x: Math.random() * w, y: Math.random() * h * .85, r: Math.random() < .08 ? 1.3 : Math.random() * .8 + .2,
         a: Math.random() * .7 + .2, f: Math.random() * 2 + .5, o: Math.random() * 6.28,
-        c: Math.random() < .15 ? '226,192,132' : '236,232,243',
+        c: Math.random() < .2 ? '221,185,104' : (Math.random() < .5 ? '196,170,250' : '243,236,252'),
       }));
     }
     function pintar(t) {

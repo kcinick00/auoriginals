@@ -29,6 +29,7 @@ Google no la muestre. Los clientes ven `https://tu-sitio/` y tú entras a `https
 Con el panel puedes, desde el celular:
 - cambiar **precios** y **existencias** directo en la lista (toca el precio, o usa − / +);
 - **tomar o elegir una foto** de cada perfume (se reduce sola y puede quitar el fondo blanco);
+- **subir muchas fotos de una vez**: botón de fotos en la barra superior; cada archivo se asigna al perfume cuyo nombre coincide (`lattafa-asad.jpg`);
 - corregir nombre, marca, presentación o colección, y **agregar perfumes nuevos**;
 - ver **sin foto**, **agotados** y **con cambios** con un toque en los filtros.
 
@@ -88,3 +89,10 @@ Para un dominio propio, crea un archivo `CNAME` con el dominio (por ejemplo `auo
 
 Basado en la estructura de [ricodelico](https://github.com/kcinick00/ricodelico) (PWA estática con pedidos por WhatsApp), rediseñado para perfumería.
 Tipografías: Bodoni Moda y Jost (Google Fonts).
+
+## Logo y estilo (v3 "Violeta")
+
+El diseño toma los colores del Instagram @auoriginals: negro orquídea, violeta eléctrico, lavanda y el dorado del logo.
+- `images/logo.png` es el emblema dorado con fondo transparente (cabecera, portada) y `images/logo-circulo.png` la versión redonda del perfil.
+- Ambos se recortaron de una captura del perfil y tienen poca resolución. **Para que se vean nítidos, reemplázalos por el archivo original del logo** manteniendo los mismos nombres.
+- Las fotos reales de cada perfume se muestran sobre un pedestal lavanda; el fondo blanco de la foto se funde solo.
