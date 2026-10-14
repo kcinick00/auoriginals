@@ -102,8 +102,6 @@
     pintarTasa();
     $('#anio').textContent = new Date().getFullYear();
 
-    $('#hero-frasco').outerHTML = Frascos.svg({ id: 'hero-au', marca: 'AU', nombre: 'Originals', genero: 'Unisex', presentacion: 'Eau de Parfum' },
-      { forma: 'clasico', tapa: 'oro', tinte: '#C99A4E', decorativo: true });
 
     // frascos de cada colección: los 3 primeros destacados de ese género
     $$('[data-frascos]').forEach(el => {
@@ -176,9 +174,7 @@
   function tarjeta(p) {
     const enBolsa = bolsa[p.id] > 0;
     const agotado = p.stock <= 0;
-    const stockTag = agotado ? '<span class="tag tag-stock">Agotado</span>'
-      : p.stock === 1 ? '<span class="tag tag-stock">Última unidad</span>'
-      : `<span class="tag tag-ok">${p.stock} disponibles</span>`;
+    const stockTag = agotado ? '<span class="tag tag-stock">Agotado</span>' : '';
     return `<article class="card${agotado ? ' agotado' : ''}" data-id="${p.id}" style="--tinte:${Frascos.tinte(p)}" tabindex="0" aria-label="${esc(p.marca + ' ' + p.nombre)}">
       <div class="card-vis">
         <div class="card-tags"><span class="tag">${abrev(p.presentacion)}</span>${stockTag}</div>
@@ -218,12 +214,10 @@
     $('#ficha-vis').innerHTML = Frascos.visual(p);
     $('#ficha-marca').textContent = p.marca;
     $('#ficha-nombre').textContent = p.nombre;
-    const disp = p.stock <= 0 ? 'Agotado' : p.stock === 1 ? 'Última unidad' : p.stock + ' unidades';
     $('#ficha-datos').innerHTML = `
       <dt>Concentración</dt><dd>${esc(p.presentacion)}</dd>
       <dt>Contenido</dt><dd>${esc(p.tamano)}</dd>
-      <dt>Colección</dt><dd>${p.genero === 'Hombre' ? 'Ellos · Hombre' : p.genero === 'Mujer' ? 'Ellas · Mujer' : 'Unisex'}</dd>
-      <dt>Disponible</dt><dd>${disp}</dd>`;
+      <dt>Colección</dt><dd>${p.genero === 'Hombre' ? 'Ellos · Hombre' : p.genero === 'Mujer' ? 'Ellas · Mujer' : 'Unisex'}</dd>${p.stock <= 0 ? '\n      <dt>Disponible</dt><dd>Agotado</dd>' : ''}`;
     $('#ficha-precio').innerHTML = precioHTML(p, true);
     actualizarBotonFicha();
     $('#ficha-wa').href = waURL(`${CONFIG.saludo}\nMe interesa: ${p.marca} · ${p.nombre} (${p.presentacion} ${p.tamano}) · ${fmtUSD(p.precio)}\n¿Sigue disponible?`);
@@ -241,7 +235,7 @@
   function agregar(id) {
     const p = PORID[id]; if (!p || p.stock <= 0) return;
     const n = bolsa[id] || 0;
-    if (n >= p.stock) { toast(p.stock === 1 ? 'Es la última unidad y ya está en tu bolsa' : 'Ya tienes todas las unidades disponibles'); return; }
+    if (n >= p.stock) { toast('Ya tienes en tu bolsa todas las unidades de este perfume'); return; }
     bolsa[id] = n + 1; guardarBolsa();
     toast(`${p.nombre} se añadió a tu bolsa`);
     render(); renderBolsa(); actualizarBotonFicha();

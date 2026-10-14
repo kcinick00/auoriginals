@@ -413,3 +413,22 @@ em{font-style:italic}
 .ficha-vis:has(img){padding-bottom:0;align-items:center;background:radial-gradient(70% 60% at 50% 38%,#FBF8FF 0%,#E6DAFB 62%,#C9B5F2 100%)}
 .ficha-vis:has(img)::before,.ficha-vis:has(img)::after{display:none}
 .ficha-vis img{mix-blend-mode:multiply;max-height:440px;max-width:86%;object-fit:contain;height:auto}
+
+/* ---------- Hero: sello con el logo ---------- */
+.sello{position:relative;width:min(100%,460px);aspect-ratio:1;justify-self:center;display:grid;place-items:center}
+.sello-halo{position:absolute;inset:6%;border-radius:50%;background:radial-gradient(circle,rgba(138,70,240,.55),rgba(138,70,240,.18) 55%,transparent 72%);filter:blur(14px)}
+.sello-anillo{position:absolute;border-radius:50%;border:1px solid rgba(221,185,104,.38)}
+.sello-anillo-1{inset:9%}
+.sello-anillo-2{inset:0;border-color:rgba(183,156,242,.28);border-style:dashed}
+.sello-logo{position:relative;width:46%;height:auto;filter:drop-shadow(0 0 30px rgba(138,70,240,.8)) drop-shadow(0 0 4px rgba(221,185,104,.5))}
+.sello-chip{position:absolute;font-size:11px;letter-spacing:.3em;text-transform:uppercase;padding:7px 14px;border-radius:999px;border:1px solid var(--line-strong);background:rgba(23,11,42,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:var(--lav)}
+.sello-chip-1{top:12%;left:2%}.sello-chip-2{top:46%;right:-2%}.sello-chip-3{bottom:10%;left:12%}
+@media (prefers-reduced-motion:no-preference){
+  .sello-anillo-2{animation:gira 60s linear infinite}
+  @keyframes gira{to{transform:rotate(360deg)}}
+  .sello-logo{animation:late 6s ease-in-out infinite}
+  @keyframes late{50%{transform:scale(1.04)}}
+  .sello-chip-1{animation:flota2 7s ease-in-out infinite}.sello-chip-2{animation:flota2 8s ease-in-out -2s infinite}.sello-chip-3{animation:flota2 9s ease-in-out -4s infinite}
+  @keyframes flota2{50%{transform:translateY(-8px)}}
+}
+@media (max-width:900px){.sello{width:min(80%,340px)}.sello-chip-2{right:0}}
