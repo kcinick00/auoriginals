@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AU Originals by Ale Urdaneta</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="AU Originals by Ale Urdaneta · Perfumes originales de hombre, mujer y unisex. Lattafa, Armaf, Versace, Paco Rabanne, Montblanc y más. Pide por WhatsApp.">
+<meta name="theme-color" content="#06060B">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AU Originals by Ale Urdaneta">
+<meta property="og:description" content="Perfumes originales seleccionados uno a uno. Explora el catálogo y pide por WhatsApp.">
+<meta property="og:image" content="images/og-image.jpg">
+<meta property="og:locale" content="es_VE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=2.1">
+</head>
+<body>
+
+<div class="anuncio">
+  <div class="wrap">
+    <span>Fragancias <b>100% originales</b></span>
+    <span>Instagram <b>@auoriginals</b></span>
+    <span>WhatsApp <b>0424-7071667</b></span>
+    <span>Euro BCV <b id="tasa-anuncio">Bs 982,00</b></span>
+  </div>
+</div>
+
+<header class="header">
+  <div class="wrap">
+    <nav class="nav" aria-label="Principal">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#catalogo" data-ir-genero="Hombre">Ellos</a>
+      <a href="#catalogo" data-ir-genero="Mujer">Ellas</a>
+      <a href="#catalogo" data-ir-genero="Unisex">Unisex</a>
+    </nav>
+    <a class="marca" href="#" aria-label="AU Originals, inicio">
+      <span class="marca-au">AU ORIGINALS</span>
+      <span class="marca-sub">by Ale Urdaneta</span>
+    </a>
+    <div class="header-acc">
+      <a class="icon-btn" id="btn-ig" href="https://instagram.com/auoriginals" target="_blank" rel="noopener" aria-label="Instagram @auoriginals">
+        <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6"/></svg>
+      </a>
+      <button class="icon-btn" id="btn-bolsa" type="button" aria-label="Abrir bolsa">
+        <svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="lbl">Bolsa</span>
+        <span class="bolsa-count" data-n="0" id="bolsa-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <canvas id="cielo" aria-hidden="true"></canvas>
+    <div class="luna" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-texto">
+        <span class="eyebrow">Perfumería de noche · Colección de octubre</span>
+        <h1 class="hero-mono">AU<span>ORIGINALS</span></h1>
+        <p class="hero-firma">por <em>Ale Urdaneta</em></p>
+        <p class="hero-lead">Para las noches que se recuerdan. Fragancias originales elegidas una a una: grandes casas europeas, perfumería árabe y ediciones que no se repiten.</p>
+        <div class="hero-acciones">
+          <a class="btn btn-oro" href="#catalogo">Ver el catálogo</a>
+          <a class="btn js-wa" href="#" target="_blank" rel="noopener">Asesoría por WhatsApp</a>
+        </div>
+        <div class="hero-datos">
+          <div><strong id="dato-total">96</strong><small>Fragancias</small></div>
+          <div><strong id="dato-casas">34</strong><small>Casas</small></div>
+          <div><strong id="dato-desde">$15</strong><small>Desde</small></div>
+        </div>
+      </div>
+      <div class="hero-escena" aria-hidden="true">
+        <div class="foco"></div>
+        <div class="escenario"><div id="hero-frasco"></div></div>
+        <div class="piso"></div>
+        <span class="nota nota-1"><b>21:00</b>salida</span>
+        <span class="nota nota-2"><b>00:00</b>corazón</span>
+        <span class="nota nota-3"><b>04:00</b>fondo</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="casas" aria-hidden="true"><div class="casas-pista" id="casas-pista"></div></div>
+
+  <!-- ===== COLECCIONES ===== -->
+  <section class="seccion" id="colecciones">
+    <div class="wrap">
+      <div class="seccion-cab">
+        <div>
+          <span class="eyebrow">Colecciones</span>
+          <h2>Una firma <em>para cada noche</em></h2>
+        </div>
+        <p>Explora por colección o entra directo al catálogo completo con filtros por casa, concentración y precio.</p>
+      </div>
+      <div class="colecciones">
+        <a class="coleccion" href="#catalogo" data-ir-genero="Hombre">
+          <div class="coleccion-tit"><small>Pour homme</small>Ellos</div>
+          <div class="frascos" data-frascos="Hombre"></div>
+          <div class="coleccion-pie"><span data-cuenta="Hombre">44 fragancias</span><span>Descubrir →</span></div>
+        </a>
+        <a class="coleccion" href="#catalogo" data-ir-genero="Mujer">
+          <div class="coleccion-tit"><small>Pour femme</small>Ellas</div>
+          <div class="frascos" data-frascos="Mujer"></div>
+          <div class="coleccion-pie"><span data-cuenta="Mujer">38 fragancias</span><span>Descubrir →</span></div>
+        </a>
+        <a class="coleccion" href="#catalogo" data-ir-genero="Unisex">
+          <div class="coleccion-tit"><small>Pour tous</small>Unisex</div>
+          <div class="frascos" data-frascos="Unisex"></div>
+          <div class="coleccion-pie"><span data-cuenta="Unisex">14 fragancias</span><span>Descubrir →</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CATÁLOGO ===== -->
+  <section id="catalogo" class="seccion" style="padding-top:0">
+    <div class="wrap">
+      <div class="seccion-cab">
+        <div>
+          <span class="eyebrow">Catálogo</span>
+          <h2>La <em>colección</em> completa</h2>
+        </div>
+        <p>Toca un perfume para ver su ficha. Añádelo a tu bolsa y envía el pedido por WhatsApp.</p>
+      </div>
+    </div>
+
+    <div class="filtros" id="filtros">
+      <div class="wrap">
+        <div class="filtros-fila">
+          <div class="chips" role="group" aria-label="Colección">
+            <button class="chip" type="button" data-genero="Todos" aria-pressed="true">Todos<span class="n" data-n="Todos"></span></button>
+            <button class="chip" type="button" data-genero="Hombre" aria-pressed="false">Ellos<span class="n" data-n="Hombre"></span></button>
+            <button class="chip" type="button" data-genero="Mujer" aria-pressed="false">Ellas<span class="n" data-n="Mujer"></span></button>
+            <button class="chip" type="button" data-genero="Unisex" aria-pressed="false">Unisex<span class="n" data-n="Unisex"></span></button>
+          </div>
+          <label class="buscar" for="f-buscar">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <span class="sr-only">Buscar</span>
+            <input id="f-buscar" type="search" placeholder="Buscar perfume o casa…" autocomplete="off">
+          </label>
+          <button class="chip btn-filtros" type="button" id="btn-filtros" aria-expanded="false">Filtros</button>
+        </div>
+        <div class="filtros-fila extra">
+          <div class="selects">
+            <div class="sel"><label class="sr-only" for="f-marca">Casa</label><select id="f-marca"><option value="">Todas las casas</option></select></div>
+            <div class="sel"><label class="sr-only" for="f-tipo">Concentración</label><select id="f-tipo"><option value="">Toda concentración</option></select></div>
+            <div class="sel"><label class="sr-only" for="f-orden">Ordenar</label>
+              <select id="f-orden">
+                <option value="destacados">Destacados</option>
+                <option value="precio-asc">Precio: menor a mayor</option>
+                <option value="precio-desc">Precio: mayor a menor</option>
+                <option value="az">Nombre A–Z</option>
+                <option value="marca">Por casa</option>
+              </select>
+            </div>
+          </div>
+          <div class="moneda" role="group" aria-label="Moneda">
+            <button type="button" data-moneda="USD" aria-pressed="true">$</button>
+            <button type="button" data-moneda="BS" aria-pressed="false">Bs</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <p class="resultado" id="resultado" aria-live="polite"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- ===== GUÍA ===== -->
+  <section class="seccion guia" id="guia">
+    <div class="wrap">
+      <div class="seccion-cab">
+        <div>
+          <span class="eyebrow">Guía de concentraciones</span>
+          <h2>¿Parfum o <em>Toilette</em>?</h2>
+        </div>
+        <p>La concentración de esencia define cuánto dura un perfume en la piel y cómo se proyecta. Así se leen las etiquetas del catálogo.</p>
+      </div>
+      <div class="guia-tabla">
+        <div class="guia-col">
+          <span class="abrev">EDP</span>
+          <h3>Eau de Parfum</h3>
+          <dl><dt>Esencia</dt><dd>15 – 20 %</dd><dt>Duración</dt><dd>6 a 8 horas</dd><dt>Ideal</dt><dd>Noche, ocasiones y climas frescos</dd></dl>
+          <div class="barra"><i style="width:85%"></i></div>
+        </div>
+        <div class="guia-col">
+          <span class="abrev">EDT</span>
+          <h3>Eau de Toilette</h3>
+          <dl><dt>Esencia</dt><dd>5 – 15 %</dd><dt>Duración</dt><dd>3 a 5 horas</dd><dt>Ideal</dt><dd>Día, oficina y calor</dd></dl>
+          <div class="barra"><i style="width:55%"></i></div>
+        </div>
+        <div class="guia-col">
+          <span class="abrev">Spray</span>
+          <h3>Desodorante perfumado</h3>
+          <dl><dt>Esencia</dt><dd>1 – 3 %</dd><dt>Duración</dt><dd>1 a 2 horas</dd><dt>Ideal</dt><dd>Complemento del perfume</dd></dl>
+          <div class="barra"><i style="width:20%"></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LA CASA ===== -->
+  <section class="seccion" id="nosotros">
+    <div class="wrap casa">
+      <div>
+        <p class="casa-cita">Un perfume es lo primero que llega y lo último que se olvida al final de la noche.</p>
+        <p class="casa-firma">Ale Urdaneta · Fundadora</p>
+      </div>
+      <div class="casa-texto">
+        <span class="eyebrow">La casa</span>
+        <p style="margin-top:14px">AU Originals nace de una pasión por la perfumería y de una promesa sencilla: solo fragancias originales, en su caja y con su presentación oficial.</p>
+        <p>Cada referencia del catálogo está elegida a mano, desde clásicos como Versace, Paco Rabanne o Montblanc hasta la perfumería árabe de Lattafa, Armaf y Afnan que hoy marca tendencia.</p>
+        <div class="pilares">
+          <div><h3>Originales</h3><p>Producto sellado, con su caja y presentación oficial.</p></div>
+          <div><h3>Asesoría</h3><p>Te ayudamos a elegir según tu estilo, ocasión o para regalar.</p></div>
+          <div><h3>Piezas únicas</h3><p>Muchas referencias tienen una sola unidad disponible.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CÓMO PEDIR ===== -->
+  <section class="seccion" id="como-pedir" style="padding-top:0">
+    <div class="wrap">
+      <div class="seccion-cab">
+        <div>
+          <span class="eyebrow">Cómo pedir</span>
+          <h2>Tu fragancia, <em>en tres pasos</em></h2>
+        </div>
+      </div>
+      <div class="pasos">
+        <div class="paso"><h3>Elige</h3><p>Explora el catálogo y añade a tu bolsa los perfumes que te gusten.</p></div>
+        <div class="paso"><h3>Envía</h3><p>Desde la bolsa, envía tu pedido por WhatsApp con un solo toque.</p></div>
+        <div class="paso"><h3>Recibe</h3><p>Confirmamos disponibilidad, forma de pago y entrega contigo.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="marca"><span class="marca-au">AU ORIGINALS</span><span class="marca-sub">by Ale Urdaneta</span></div>
+        <p style="margin-top:18px">Perfumes originales de hombre, mujer y unisex. Precios en dólares, referencia en bolívares a la tasa euro oficial del BCV, actualizada automáticamente.</p>
+      </div>
+      <div>
+        <h4>Catálogo</h4>
+        <ul>
+          <li><a href="#catalogo" data-ir-genero="Hombre">Ellos</a></li>
+          <li><a href="#catalogo" data-ir-genero="Mujer">Ellas</a></li>
+          <li><a href="#catalogo" data-ir-genero="Unisex">Unisex</a></li>
+          <li><a href="#guia">Guía de concentraciones</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a class="js-wa" href="#" target="_blank" rel="noopener">WhatsApp 0424-7071667</a></li>
+          <li id="footer-ig"><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="#como-pedir">Cómo pedir</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-copy">
+      <span>© <span id="anio">2026</span> AU Originals by Ale Urdaneta</span>
+      <span>Precios sujetos a disponibilidad · Tasa euro BCV <span id="tasa-pie">982,00</span> Bs<span id="tasa-fecha"></span></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== Bolsa ===== -->
+<div class="velo" id="velo"></div>
+<aside class="panel" id="panel-bolsa" aria-label="Tu bolsa" aria-hidden="true">
+  <div class="panel-cab">
+    <h2>Tu bolsa</h2>
+    <button class="cerrar" type="button" data-cerrar aria-label="Cerrar bolsa"><svg viewBox="0 0 14 14"><path d="M1 1l12 12M13 1L1 13"/></svg></button>
+  </div>
+  <div class="panel-cuerpo" id="bolsa-items"></div>
+  <div class="panel-pie" id="bolsa-pie">
+    <div class="total"><span>Total</span><strong id="bolsa-total">$0</strong></div>
+    <div class="total-bs" id="bolsa-total-bs">Bs 0,00</div>
+    <label class="sr-only" for="b-nombre">Tu nombre</label>
+    <input class="campo" id="b-nombre" type="text" placeholder="Tu nombre" autocomplete="name">
+    <label class="sr-only" for="b-nota">Nota</label>
+    <input class="campo" id="b-nota" type="text" placeholder="Nota: entrega, regalo, zona (opcional)">
+    <a class="btn btn-oro" id="b-enviar" href="#" target="_blank" rel="noopener" aria-disabled="true">Enviar pedido por WhatsApp</a>
+    <p class="nota-pie">Te confirmamos disponibilidad y pago por WhatsApp.</p>
+  </div>
+</aside>
+
+<!-- ===== Ficha ===== -->
+<div class="ficha" id="ficha" aria-hidden="true">
+  <div class="ficha-caja" role="dialog" aria-modal="true" aria-labelledby="ficha-nombre">
+    <div class="ficha-vis" id="ficha-vis"></div>
+    <div class="ficha-info">
+      <button class="cerrar" type="button" data-cerrar aria-label="Cerrar ficha"><svg viewBox="0 0 14 14"><path d="M1 1l12 12M13 1L1 13"/></svg></button>
+      <span class="card-marca" id="ficha-marca"></span>
+      <h2 class="ficha-nombre" id="ficha-nombre"></h2>
+      <dl class="ficha-datos" id="ficha-datos"></dl>
+      <div class="ficha-precio" id="ficha-precio"></div>
+      <div class="ficha-acc">
+        <button class="btn btn-oro" type="button" id="ficha-add">Añadir a la bolsa</button>
+        <a class="btn" id="ficha-wa" href="#" target="_blank" rel="noopener">Consultar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fab" type="button"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span id="fab-txt">Bolsa</span></button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js?v=2.1"></script>
+<script src="catalogo.js?v=2.1"></script>
+<script src="js/frascos.js?v=2.1"></script>
+<script src="js/app.js?v=2.1"></script>
+</body>
+</html>
