@@ -107,7 +107,7 @@
     $$('[data-frascos]').forEach(el => {
       const g = el.dataset.frascos;
       const lista = ordenar(PRODUCTOS.filter(p => p.genero === g), 'destacados').slice(0, 3);
-      el.innerHTML = [lista[1], lista[0], lista[2]].filter(Boolean).map(p => Frascos.svg(p, { decorativo: true })).join('');
+      el.innerHTML = '';
     });
     ['Hombre', 'Mujer', 'Unisex'].forEach(g => {
       const n = PRODUCTOS.filter(p => p.genero === g).length;
@@ -202,6 +202,7 @@
     const lista = filtrar();
     const nombreCol = { Todos: 'la colección', Hombre: 'Ellos', Mujer: 'Ellas', Unisex: 'Unisex' }[estado.genero];
     $('#resultado').textContent = `${lista.length} ${lista.length === 1 ? 'fragancia' : 'fragancias'} · ${nombreCol}`;
+    $('#carrusel').innerHTML = ordenar(PRODUCTOS.filter(p => p.stock > 0), 'destacados').slice(0, 10).map(tarjeta).join('');
     $('#grid').innerHTML = lista.length ? lista.map(tarjeta).join('')
       : `<div class="vacio"><strong>Sin coincidencias</strong>Prueba con otra casa o borra la búsqueda.</div>`;
   }
@@ -354,13 +355,15 @@
 
   // ---------- eventos ----------
   function eventos() {
-    $('#grid').addEventListener('click', e => {
-      const add = e.target.closest('[data-add]');
-      if (add) { e.stopPropagation(); agregar(add.dataset.add); return; }
-      const card = e.target.closest('.card'); if (card) abrirFicha(card.dataset.id);
-    });
-    $('#grid').addEventListener('keydown', e => {
-      if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('card')) { e.preventDefault(); abrirFicha(e.target.dataset.id); }
+    [$('#grid'), $('#carrusel')].forEach(zona => {
+      zona.addEventListener('click', e => {
+        const add = e.target.closest('[data-add]');
+        if (add) { e.stopPropagation(); agregar(add.dataset.add); return; }
+        const card = e.target.closest('.card'); if (card) abrirFicha(card.dataset.id);
+      });
+      zona.addEventListener('keydown', e => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('card')) { e.preventDefault(); abrirFicha(e.target.dataset.id); }
+      });
     });
     $('#bolsa-items').addEventListener('click', e => {
       const m = e.target.closest('[data-menos]'), p = e.target.closest('[data-mas]');

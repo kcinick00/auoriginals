@@ -432,3 +432,12 @@ em{font-style:italic}
   @keyframes flota2{50%{transform:translateY(-8px)}}
 }
 @media (max-width:900px){.sello{width:min(80%,340px)}.sello-chip-2{right:0}}
+
+/* ---------- Carrusel de selección ---------- */
+.destacados{padding-bottom:70px}
+.carrusel{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding:6px max(var(--gutter),calc((100vw - var(--max))/2 + var(--gutter))) 22px;scrollbar-width:thin;scrollbar-color:rgba(183,156,242,.4) transparent}
+.carrusel .card{flex:0 0 clamp(210px,24vw,270px);scroll-snap-align:start}
+.carrusel::-webkit-scrollbar{height:6px}.carrusel::-webkit-scrollbar-thumb{background:rgba(183,156,242,.35);border-radius:6px}
+.carrusel-pie{display:flex;justify-content:center;margin-top:18px}
+@media (max-width:700px){.carrusel .card{flex-basis:62vw}}
+.carrusel{scroll-padding-inline:max(var(--gutter),calc((100vw - var(--max))/2 + var(--gutter)))}

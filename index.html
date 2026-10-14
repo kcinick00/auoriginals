@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=3.1">
+<link rel="stylesheet" href="css/styles.css?v=3.2">
 </head>
 <body>
 
@@ -93,33 +93,18 @@
   <div class="casas" aria-hidden="true"><div class="casas-pista" id="casas-pista"></div></div>
 
   <!-- ===== COLECCIONES ===== -->
-  <section class="seccion" id="colecciones">
+  <section class="seccion destacados" id="destacados">
     <div class="wrap">
       <div class="seccion-cab">
         <div>
-          <span class="eyebrow">Colecciones</span>
-          <h2>Una firma <em>para cada noche</em></h2>
+          <span class="eyebrow">Selección AU</span>
+          <h2>Los que <em>más se piden</em></h2>
         </div>
-        <p>Explora por colección o entra directo al catálogo completo con filtros por casa, concentración y precio.</p>
-      </div>
-      <div class="colecciones">
-        <a class="coleccion" href="#catalogo" data-ir-genero="Hombre">
-          <div class="coleccion-tit"><small>Pour homme</small>Ellos</div>
-          <div class="frascos" data-frascos="Hombre"></div>
-          <div class="coleccion-pie"><span data-cuenta="Hombre">44 fragancias</span><span>Descubrir →</span></div>
-        </a>
-        <a class="coleccion" href="#catalogo" data-ir-genero="Mujer">
-          <div class="coleccion-tit"><small>Pour femme</small>Ellas</div>
-          <div class="frascos" data-frascos="Mujer"></div>
-          <div class="coleccion-pie"><span data-cuenta="Mujer">38 fragancias</span><span>Descubrir →</span></div>
-        </a>
-        <a class="coleccion" href="#catalogo" data-ir-genero="Unisex">
-          <div class="coleccion-tit"><small>Pour tous</small>Unisex</div>
-          <div class="frascos" data-frascos="Unisex"></div>
-          <div class="coleccion-pie"><span data-cuenta="Unisex">14 fragancias</span><span>Descubrir →</span></div>
-        </a>
+        <p>Desliza para ver algunas de nuestras fragancias más elegidas, o entra al catálogo completo.</p>
       </div>
     </div>
+    <div class="carrusel" id="carrusel" tabindex="-1"></div>
+    <div class="wrap carrusel-pie"><a class="btn" href="#catalogo">Ver las 96 fragancias</a></div>
   </section>
 
   <!-- ===== CATÁLOGO ===== -->
@@ -325,6 +310,6 @@
 <script src="config.js?v=2.1"></script>
 <script src="catalogo.js?v=2.1"></script>
 <script src="js/frascos.js?v=2.1"></script>
-<script src="js/app.js?v=3.1"></script>
+<script src="js/app.js?v=3.2"></script>
 </body>
 </html>
