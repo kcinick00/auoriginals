@@ -7,15 +7,49 @@ Sitio estático (HTML, CSS y JS, sin dependencias), listo para GitHub Pages e in
 
 ```
 index.html        Página: hero, colecciones, catálogo, guía, la casa, cómo pedir
-config.js         ← WhatsApp, tasa del día (Bs/$), Instagram, saludo
+config.js         ← WhatsApp, tasa euro BCV (respaldo), Instagram, saludo
 catalogo.js       ← Los 96 perfumes: marca, nombre, presentación, tamaño, género, stock, precio, imagen
 css/styles.css    Diseño "Medianoche" (cielo estrellado, vitrina con foco y reflejo)
 js/frascos.js     Dibuja un frasco ilustrado para cada perfume que no tenga foto
 js/app.js         Filtros, búsqueda, ficha, bolsa y mensaje de WhatsApp
+admin.html        ← PANEL PRIVADO para editar precios, existencias y fotos desde el teléfono
+js/admin.js       Lógica del panel (guarda en GitHub)
+css/admin.css     Estilos del panel
+admin.webmanifest Permite instalar el panel como app aparte ("AU Admin")
 sw.js             Service worker (modo sin conexión)
 manifest.json     Datos de la app instalable
 images/           og-image.jpg y carpeta perfumes/ para fotos reales
 ```
+
+## Panel de administración (editar desde el teléfono)
+
+`admin.html` es una página aparte, **sin ningún enlace desde la tienda**, con `noindex` para que
+Google no la muestre. Los clientes ven `https://tu-sitio/` y tú entras a `https://tu-sitio/admin.html`.
+
+Con el panel puedes, desde el celular:
+- cambiar **precios** y **existencias** directo en la lista (toca el precio, o usa − / +);
+- **tomar o elegir una foto** de cada perfume (se reduce sola y puede quitar el fondo blanco);
+- corregir nombre, marca, presentación o colección, y **agregar perfumes nuevos**;
+- ver **sin foto**, **agotados** y **con cambios** con un toque en los filtros.
+
+Los cambios quedan guardados en el teléfono hasta que tocas **Publicar**. Al publicar, el panel guarda
+`catalogo.js` y las fotos en el repositorio y GitHub Pages actualiza la tienda en 1 o 2 minutos.
+
+### Configuración (una sola vez)
+
+1. Sube este repositorio a GitHub y activa **Settings → Pages** (ver más abajo).
+2. En GitHub crea un token: **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+   - *Repository access*: **Only select repositories** → solo el repositorio de AU Originals.
+   - *Permissions → Repository permissions → Contents*: **Read and write**.
+3. Abre `https://tu-sitio/admin.html` en el teléfono, toca el engranaje, escribe `usuario/repositorio`, pega el token y toca **Probar y guardar**.
+4. Para tenerlo como app: en el navegador del teléfono, **Agregar a pantalla de inicio**. Aparece como **AU Admin**, con su propio ícono.
+
+### Seguridad
+
+- Sin el token, el panel solo permite mirar: nadie puede publicar cambios aunque encuentre la página.
+- El token se guarda solo en el navegador de tu teléfono. No lo pegues en un teléfono que no sea tuyo y no lo compartas.
+- El token solo tiene acceso a este repositorio. Si pierdes el teléfono, revócalo en GitHub y crea otro.
+- Si publicas desde dos teléfonos a la vez, el panel vuelve a leer el catálogo antes de guardar, así que no se pisan los cambios de otros perfumes.
 
 ## Tareas habituales
 
@@ -28,7 +62,7 @@ y recalcula todos los precios en Bs. Si no hay conexión, usa la última tasa ob
 si nunca pudo obtenerla, usa `tasaBs` de `config.js`.
 Para fijar una tasa a mano, pon `tasaAutomatica: false` y escribe el valor en `tasaBs`.
 
-**Cambiar precio o existencias** — en `catalogo.js`, busca el perfume y cambia `precio` o `stock`.
+**Cambiar precio o existencias a mano** — lo normal es usar el panel; si prefieres, en `catalogo.js` busca el perfume y cambia `precio` o `stock`.
 Con `stock: 0` aparece como *Agotado*; con `1`, como *Última unidad*.
 
 **Agregar un perfume** — copia una línea de `catalogo.js` y cambia los datos (el `id` debe ser único).

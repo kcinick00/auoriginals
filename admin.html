@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AU Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#06060B">
+<link rel="manifest" href="admin.webmanifest">
+<link rel="icon" href="icon-admin-192.png">
+<link rel="apple-touch-icon" href="icon-admin-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css?v=1.0">
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="tit"><b>AU</b><span>Admin</span></div>
+    <button class="estado" id="estado" type="button" data-modo="local" aria-label="Estado de la conexión">Solo vista</button>
+    <a class="ib" id="ver-sitio" href="./" target="_blank" rel="noopener" aria-label="Ver la tienda pública">
+      <svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+    </a>
+    <button class="ib" id="btn-nuevo" type="button" aria-label="Agregar perfume nuevo">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button class="ib" id="btn-ajustes" type="button" aria-label="Ajustes de conexión">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </div>
+  <div class="filtros">
+    <label class="buscar" for="q">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <span class="sr-only">Buscar</span>
+      <input id="q" type="search" placeholder="Buscar perfume o casa…" autocomplete="off">
+    </label>
+    <div class="chips" id="chips" role="group" aria-label="Filtrar">
+      <button type="button" data-f="todos" aria-pressed="true">Todos</button>
+      <button type="button" data-f="sinfoto" aria-pressed="false">Sin foto</button>
+      <button type="button" data-f="agotado" aria-pressed="false">Agotados</button>
+      <button type="button" data-f="cambios" aria-pressed="false">Con cambios</button>
+      <button type="button" data-f="Hombre" aria-pressed="false">Ellos</button>
+      <button type="button" data-f="Mujer" aria-pressed="false">Ellas</button>
+      <button type="button" data-f="Unisex" aria-pressed="false">Unisex</button>
+    </div>
+  </div>
+</header>
+
+<div class="aviso" id="aviso" role="status" hidden></div>
+<p class="conteo" id="conteo" aria-live="polite"></p>
+<main class="lista" id="lista"></main>
+
+<div class="pie" id="pie" hidden>
+  <span id="pie-n"></span>
+  <button class="btn" id="btn-descartar" type="button">Descartar</button>
+  <button class="btn primario" id="btn-publicar" type="button">Publicar</button>
+</div>
+
+<!-- ===== Editor ===== -->
+<dialog class="hoja" id="hoja-editor" aria-labelledby="ed-titulo">
+  <form id="f-editor" method="dialog" novalidate>
+    <div class="hoja-cab">
+      <h2 id="ed-titulo">Editar perfume</h2>
+      <button class="ib" type="button" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="foto-zona">
+      <div class="foto-prev" id="ed-prev"></div>
+      <div class="foto-acc">
+        <label class="btn" for="ed-file">Tomar o elegir foto</label>
+        <input type="file" id="ed-file" accept="image/*" hidden>
+        <button class="btn" type="button" id="ed-quitar">Quitar foto</button>
+        <label class="check"><input type="checkbox" id="ed-sinfondo" checked> Quitar fondo blanco automáticamente</label>
+      </div>
+      <p class="ayuda" id="ed-foto-msg">Mejor con la botella sola, de frente y sobre fondo blanco.</p>
+    </div>
+    <div class="campos">
+      <label>Marca<input id="ed-marca" autocomplete="off"></label>
+      <label>Nombre<input id="ed-nombre" autocomplete="off"></label>
+      <label>Presentación
+        <select id="ed-pres">
+          <option>Eau de Parfum</option><option>Eau de Toilette</option><option>Desodorante spray</option><option>Set de regalo EDP</option><option>Extrait de Parfum</option>
+        </select>
+      </label>
+      <label>Tamaño<input id="ed-tamano" placeholder="100 ml" autocomplete="off"></label>
+      <label>Colección
+        <select id="ed-genero"><option value="Hombre">Ellos · Hombre</option><option value="Mujer">Ellas · Mujer</option><option value="Unisex">Unisex</option></select>
+      </label>
+      <label>Precio ($)<input id="ed-precio" inputmode="decimal" autocomplete="off"></label>
+      <label>Existencias<input id="ed-stock" inputmode="numeric" autocomplete="off"></label>
+    </div>
+    <p class="error" id="ed-error" hidden></p>
+    <div class="hoja-pie">
+      <button class="btn" type="button" data-cerrar>Cancelar</button>
+      <button class="btn primario" type="submit">Guardar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ===== Ajustes ===== -->
+<dialog class="hoja" id="hoja-ajustes" aria-labelledby="aj-titulo">
+  <form id="f-ajustes" method="dialog" novalidate>
+    <div class="hoja-cab">
+      <h2 id="aj-titulo">Conexión con GitHub</h2>
+      <button class="ib" type="button" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <p class="ayuda">Para publicar desde el teléfono, este panel necesita permiso para guardar en tu repositorio. Se configura una sola vez y el permiso queda guardado solo en este teléfono.</p>
+    <div class="campos">
+      <label>Repositorio (usuario/nombre)<input id="aj-repo" placeholder="aleurdaneta/au-originals" autocapitalize="off" autocomplete="off" spellcheck="false"></label>
+      <label>Rama<input id="aj-rama" placeholder="main" autocapitalize="off" autocomplete="off" spellcheck="false"></label>
+      <label>Token de acceso<input id="aj-token" type="password" placeholder="github_pat_…" autocapitalize="off" autocomplete="off" spellcheck="false"></label>
+    </div>
+    <details class="como">
+      <summary>¿Cómo consigo el token?</summary>
+      <ol>
+        <li>En GitHub abre <b>Settings → Developer settings → Personal access tokens → Fine-grained tokens</b> y toca <b>Generate new token</b>.</li>
+        <li>En <b>Repository access</b> elige <b>Only select repositories</b> y marca solo tu repositorio de AU Originals.</li>
+        <li>En <b>Permissions → Repository permissions</b> pon <b>Contents: Read and write</b>.</li>
+        <li>Genera el token, cópialo y pégalo arriba.</li>
+      </ol>
+      <p>Pon la caducidad más larga que permita GitHub. Cuando caduque, genera otro y pégalo aquí.</p>
+    </details>
+    <p class="error" id="aj-error" hidden></p>
+    <div class="hoja-pie">
+      <button class="btn" type="button" id="aj-desconectar">Desconectar</button>
+      <button class="btn primario" type="submit">Probar y guardar</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="progreso" id="progreso" hidden><div><span class="rueda"></span><p id="progreso-txt">Publicando…</p></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="catalogo.js?v=3"></script>
+<script src="js/frascos.js?v=2.1"></script>
+<script src="js/admin.js?v=1.0"></script>
+</body>
+</html>
