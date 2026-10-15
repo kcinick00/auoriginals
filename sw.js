@@ -3,7 +3,7 @@
 // Cada vez que subas cambios (precios, catálogo, diseño), sube este número
 // para que los clientes reciban la versión nueva enseguida.
 // =========================================================
-const CACHE_NAME = "au-originals-v4.0";
+const CACHE_NAME = "au-originals-v4.1";
 
 const FILES_TO_CACHE = [
   "./",
@@ -15,7 +15,10 @@ const FILES_TO_CACHE = [
   "js/app.js",
   "manifest.json",
   "icon-192.png",
-  "images/logo.svg",
+  "images/logos/emblema.svg",
+  "images/logos/circulo.svg",
+  "images/logos/monograma.svg",
+  "images/logos/frasco.svg",
   "ajustes.js",
   "js/tema.js",
   "icon-512.png"

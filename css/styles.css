@@ -380,7 +380,7 @@ em{font-style:italic}
    v3 · Violeta: logo y detalles tomados del Instagram
    ========================================================= */
 .marca{flex-direction:row;gap:12px;align-items:center}
-.logo-mark{display:inline-block;background:var(--gold);-webkit-mask:url(../images/logo.svg) center/contain no-repeat;mask:url(../images/logo.svg) center/contain no-repeat}
+.logo-mark{display:inline-block;background:var(--gold);-webkit-mask:var(--logo-img,url(../images/logos/emblema.svg)) center/contain no-repeat;mask:var(--logo-img,url(../images/logos/emblema.svg)) center/contain no-repeat}
 .marca-logo{width:34px;height:37px;flex:none;filter:drop-shadow(0 0 12px rgba(var(--second-rgb),.6))}
 .marca-txt{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
 .marca-txt .marca-au{padding-left:0}
@@ -460,3 +460,8 @@ html[data-modelo="compacto"] .seccion{padding-block:64px}
 
 /* Elementos que se pueden ocultar desde el panel admin */
 html[data-ocultar~="carrusel"] #destacados,html[data-ocultar~="casas"] .casas,html[data-ocultar~="datos"] .hero-datos{display:none}
+
+/* logo elegido: los redondos necesitan más tamaño en la portada */
+html[data-logo="circulo"] .sello-logo{width:52%;aspect-ratio:1}
+html[data-logo="monograma"] .sello-logo{width:44%;aspect-ratio:1}
+html[data-logo="emblema"] .sello-logo{width:40%}

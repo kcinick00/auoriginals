@@ -441,7 +441,7 @@ ${filas.join(',\n')}
 
   // ---------- apariencia (modelo, colores, letras) ----------
   const dlgAp = $('#hoja-apariencia'), pv = $('#ap-prev');
-  const CAB_AJ = '// =========================================================\n// ajustes.js · Apariencia de la tienda (AU Originals)\n// Lo actualiza el panel admin.html (botón de paleta) y también se puede editar a mano.\n//  - modelo:   "sello" | "centrado" | "compacto"\n//  - paleta:   "violeta" | "medianoche" | "rosa" | "esmeralda" | "negro-oro" | "marfil" | "personalizada"\n//  - colores:  solo si paleta = "personalizada": { fondo, texto, acento, acento2 }\n//  - fuenteTitulos / fuenteTexto: nombre de una fuente de Google Fonts (ver js/tema.js)\n//  - mostrar:  { carrusel, casas, datos }   ·   textos: { eyebrow, lead }\n// =========================================================\n';
+  const CAB_AJ = '// =========================================================\n// ajustes.js · Apariencia de la tienda (AU Originals)\n// Lo actualiza el panel admin.html (botón de paleta) y también se puede editar a mano.\n//  - modelo:   "sello" | "centrado" | "compacto"\n//  - logo:     "emblema" | "circulo" | "monograma" | "frasco"\n//  - paleta:   "violeta" | "medianoche" | "rosa" | "esmeralda" | "negro-oro" | "marfil" | "personalizada"\n//  - colores:  solo si paleta = "personalizada": { fondo, texto, acento, acento2 }\n//  - fuenteTitulos / fuenteTexto: nombre de una fuente de Google Fonts (ver js/tema.js)\n//  - mostrar:  { carrusel, casas, datos }   ·   textos: { eyebrow, lead }\n// =========================================================\n';
   let ap = null, apInicial = null;
   const copia = o => JSON.parse(JSON.stringify(o));
   const publicadoAj = () => TEMA.fusionar(typeof AJUSTES !== 'undefined' ? copia(AJUSTES) : {});
@@ -455,6 +455,7 @@ ${filas.join(',\n')}
   function colorBase() { const p = TEMA.PALETAS[ap.paleta] || TEMA.PALETAS.violeta; return { fondo: p.bg, texto: p.fg, acento: p.a, acento2: p.b }; }
   function pintarControles() {
     $('#ap-modelos').innerHTML = Object.keys(TEMA.MODELOS).map(k => `<button type="button" class="ap-modelo" role="radio" data-modelo="${k}" aria-checked="${ap.modelo === k}"><b>${esc(TEMA.MODELOS[k].nombre)}</b><span>${esc(TEMA.MODELOS[k].desc)}</span></button>`).join('');
+    $('#ap-logos').innerHTML = Object.keys(TEMA.LOGOS).map(k => `<button type="button" class="ap-logo" role="radio" data-logo="${k}" aria-checked="${ap.logo === k}"><i style="-webkit-mask-image:url(${TEMA.LOGOS[k].img});mask-image:url(${TEMA.LOGOS[k].img})"></i><b>${esc(TEMA.LOGOS[k].nombre)}</b></button>`).join('');
     const pal = Object.keys(TEMA.PALETAS).map(k => { const p = TEMA.PALETAS[k]; return `<button type="button" class="ap-paleta" role="radio" data-paleta="${k}" aria-checked="${ap.paleta === k}"><i style="background:linear-gradient(90deg,${p.bg} 0 34%,${p.b} 34% 56%,${p.a} 56% 78%,${p.fg} 78%)"></i>${esc(p.nombre)}</button>`; });
     const c = ap.colores || {};
     pal.push(`<button type="button" class="ap-paleta" role="radio" data-paleta="personalizada" aria-checked="${ap.paleta === 'personalizada'}"><i style="background:linear-gradient(90deg,${c.fondo || '#222'} 0 34%,${c.acento2 || '#888'} 34% 56%,${c.acento || '#ccc'} 56% 78%,${c.texto || '#fff'} 78%)"></i>Personalizada</button>`);
@@ -485,6 +486,7 @@ ${filas.join(',\n')}
   }
   $('#btn-apariencia').addEventListener('click', abrirApariencia);
   $('#ap-modelos').addEventListener('click', e => { const b = e.target.closest('[data-modelo]'); if (!b) return; ap.modelo = b.dataset.modelo; pintarControles(); vistaPrevia(); });
+  $('#ap-logos').addEventListener('click', e => { const b = e.target.closest('[data-logo]'); if (!b) return; ap.logo = b.dataset.logo; pintarControles(); vistaPrevia(); });
   $('#ap-paletas').addEventListener('click', e => {
     const b = e.target.closest('[data-paleta]'); if (!b) return;
     if (b.dataset.paleta === 'personalizada' && ap.paleta !== 'personalizada') ap.colores = Object.assign(colorBase(), ap.colores || {});
@@ -499,7 +501,7 @@ ${filas.join(',\n')}
   $('#ap-reset').addEventListener('click', () => { ap = copia(apInicial || TEMA.fusionar({})); pintarControles(); vistaPrevia(); toast('Se restauró lo que está publicado'); });
 
   function ajustesLimpios() {
-    const o = { modelo: ap.modelo, paleta: ap.paleta, colores: ap.paleta === 'personalizada' ? ap.colores : {}, fuenteTitulos: ap.fuenteTitulos, fuenteTexto: ap.fuenteTexto,
+    const o = { modelo: ap.modelo, logo: ap.logo, paleta: ap.paleta, colores: ap.paleta === 'personalizada' ? ap.colores : {}, fuenteTitulos: ap.fuenteTitulos, fuenteTexto: ap.fuenteTexto,
       mostrar: { carrusel: ap.mostrar.carrusel !== false, casas: ap.mostrar.casas !== false, datos: ap.mostrar.datos !== false },
       textos: { eyebrow: String(ap.textos.eyebrow || '').trim(), lead: String(ap.textos.lead || '').trim() } };
     return o;

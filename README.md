@@ -104,6 +104,8 @@ Para probar sin publicar: `index.html?vista={"paleta":"rosa","modelo":"centrado"
 
 ## Logo y estilo
 
+El logo se elige en **admin → Apariencia → Logo** (emblema, círculo, monograma o frasco), o a mano con `"logo"` en `ajustes.js`. Los archivos están en `images/logos/`.
+
 - El logo es `images/logo.svg`: un frasco con las letras AU, de **un solo color** (toma el color de acento de la paleta elegida).
   Para cambiarlo, reemplaza ese archivo por otro SVG de una sola forma/color (cualquier color, solo se usa su silueta).
 - Los íconos de la app (`icon-*.png`) y `images/og-image.jpg` se generaron con ese mismo logo.

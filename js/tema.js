@@ -34,7 +34,13 @@
     'centrado': { nombre: 'Centrado', desc: 'Todo centrado: logo arriba y textos al medio. Muy elegante en el teléfono.' },
     'compacto': { nombre: 'Compacto', desc: 'Portada corta para que el catálogo se vea enseguida.' },
   };
-  const DEFECTO = { modelo: 'sello', paleta: 'violeta', colores: {}, fuenteTitulos: 'Roboto', fuenteTexto: 'Roboto',
+  const LOGOS = {
+    'emblema':   { nombre: 'Emblema',   desc: 'El frasco-corazón del Instagram con la "au" en cursiva.', img: 'images/logos/emblema.svg' },
+    'circulo':   { nombre: 'Círculo',   desc: 'El emblema dentro de un doble anillo.',                    img: 'images/logos/circulo.svg' },
+    'monograma': { nombre: 'Monograma', desc: 'Solo la "au" grande dentro de un rombo.',                  img: 'images/logos/monograma.svg' },
+    'frasco':    { nombre: 'Frasco',    desc: 'El diseño anterior (frasco con letras AU).',               img: 'images/logos/frasco.svg' },
+  };
+  const DEFECTO = { modelo: 'sello', logo: 'emblema', paleta: 'violeta', colores: {}, fuenteTitulos: 'Roboto', fuenteTexto: 'Roboto',
     mostrar: { carrusel: true, casas: true, datos: true }, textos: { eyebrow: '', lead: '' } };
   const fusionar = aj => { aj = aj || {}; const r = Object.assign({}, DEFECTO, aj); r.mostrar = Object.assign({}, DEFECTO.mostrar, aj.mostrar); r.textos = Object.assign({}, DEFECTO.textos, aj.textos); r.colores = aj.colores || {}; return r; };
 
@@ -68,6 +74,7 @@
       '--accent-rgb': rgb(p.a), '--second-rgb': rgb(p.b), '--lav-rgb': rgb(p.c), '--bg-rgb': rgb(p.bg), '--surface-rgb': rgb(mezcla(p.bg, p.fg, .085)), '--fg-rgb': rgb(p.fg),
       '--ped-1': mezcla('#FFFFFF', p.c, .05), '--ped-2': mezcla('#FFFFFF', p.c, .3), '--ped-3': mezcla('#FFFFFF', p.c, .55),
       '--ped-ink': mezcla(p.b, '#000000', .45), '--ped-ink-rgb': rgb(mezcla(p.b, '#000000', .45)),
+      '--logo-img': 'url("../' + (LOGOS[aj.logo] || LOGOS.emblema).img + '")',  // relativa a css/styles.css
       '--f-display': fam(aj.fuenteTitulos), '--f-sans': fam(aj.fuenteTexto),
     };
     return { vars: v, claro: claro, bg: p.bg };
@@ -86,6 +93,7 @@
     if (!st) { st = document.createElement('style'); st.id = 'tema-vars'; document.head.appendChild(st); }
     st.textContent = 'html:root{color-scheme:' + (r.claro ? 'light' : 'dark') + ';' + Object.keys(r.vars).map(k => k + ':' + r.vars[k]).join(';') + '}';
     el.dataset.modelo = MODELOS[aj.modelo] ? aj.modelo : 'sello';
+    el.dataset.logo = LOGOS[aj.logo] ? aj.logo : 'emblema';
     el.dataset.ocultar = Object.keys(aj.mostrar).filter(k => aj.mostrar[k] === false).join(' ');
     const poner = () => ['eyebrow', 'lead'].forEach(k => { const n = document.querySelector('[data-t="' + k + '"]'); if (!n) return; if (n.dataset.orig == null) n.dataset.orig = n.textContent; n.textContent = String(aj.textos[k] || '').trim() || n.dataset.orig; });
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', poner); else poner();
@@ -98,7 +106,7 @@
     return r;
   }
 
-  window.TEMA = { FUENTES, PALETAS, MODELOS, DEFECTO, fusionar, variables, urlFuentes, aplicar };
+  window.TEMA = { FUENTES, PALETAS, MODELOS, LOGOS, DEFECTO, fusionar, variables, urlFuentes, aplicar };
 
   if (document.documentElement.dataset.temaAuto !== 'no') {
     let aj = typeof AJUSTES !== 'undefined' ? AJUSTES : {};
