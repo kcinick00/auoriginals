@@ -441,7 +441,7 @@ ${filas.join(',\n')}
 
   // ---------- apariencia (modelo, colores, letras) ----------
   const dlgAp = $('#hoja-apariencia'), pv = $('#ap-prev');
-  const CAB_AJ = '// =========================================================\n// ajustes.js · Apariencia de la tienda (AU Originals)\n// Lo actualiza el panel admin.html (botón de paleta) y también se puede editar a mano.\n//  - modelo:   "sello" | "centrado" | "compacto"\n//  - logo:     "emblema" | "circulo" | "monograma" | "frasco"\n//  - paleta:   "violeta" | "medianoche" | "rosa" | "esmeralda" | "negro-oro" | "marfil" | "personalizada"\n//  - colores:  solo si paleta = "personalizada": { fondo, texto, acento, acento2 }\n//  - fuenteTitulos / fuenteTexto: nombre de una fuente de Google Fonts (ver js/tema.js)\n//  - mostrar:  { carrusel, casas, datos }   ·   textos: { eyebrow, lead }\n// =========================================================\n';
+  const CAB_AJ = '// =========================================================\n// ajustes.js · Apariencia de la tienda (AU Originals)\n// Lo actualiza el panel admin.html (botón de paleta) y también se puede editar a mano.\n//  - modelo:   "sello" | "centrado" | "compacto"\n//  - logo:     "emblema" | "circulo" | "monograma" | "frasco"\n//  - paleta:   "violeta" | "medianoche" | "rosa" | "esmeralda" | "negro-oro" | "marfil" | "personalizada"\n//  - colores:  (opcional) cambia colores sueltos de la paleta: { fondo, texto, titulo, acento, acento2, detalle, tarjetas, logo } en formato #RRGGBB\n//  - fuenteTitulos / fuenteTexto: nombre de una fuente de Google Fonts (ver js/tema.js)\n//  - mostrar:  { carrusel, casas, datos }   ·   textos: { eyebrow, lead }\n// =========================================================\n';
   let ap = null, apInicial = null;
   const copia = o => JSON.parse(JSON.stringify(o));
   const publicadoAj = () => TEMA.fusionar(typeof AJUSTES !== 'undefined' ? copia(AJUSTES) : {});
@@ -452,17 +452,19 @@ ${filas.join(',\n')}
   let tAp; const vistaPrevia = () => { clearTimeout(tAp); tAp = setTimeout(pintarVistaPrevia, 60); store.set('apariencia', ap); };
   pv.addEventListener('load', pintarVistaPrevia);
 
-  function colorBase() { const p = TEMA.PALETAS[ap.paleta] || TEMA.PALETAS.violeta; return { fondo: p.bg, texto: p.fg, acento: p.a, acento2: p.b }; }
+  const colorActual = () => { const p = TEMA.paletaDe(ap), v = TEMA.variables(ap).vars; return { fondo: p.bg, texto: p.fg, titulo: p.tit, acento: p.a, acento2: p.b, detalle: p.c, tarjetas: v['--surface'], logo: p.logo }; };
+  const hexOk = h => /^#[0-9a-f]{6}$/i.test(h);
+  function pintarColores() {
+    const act = colorActual(), mod = ap.colores || {};
+    $('#ap-custom').innerHTML = Object.keys(TEMA.ROLES).map(k => `<div class="ap-col${mod[k] ? ' mod' : ''}" data-rol="${k}"><input type="color" value="${act[k]}" aria-label="${esc(TEMA.ROLES[k].nombre)}"><span><b>${esc(TEMA.ROLES[k].nombre)}</b><small>${esc(TEMA.ROLES[k].desc)}</small></span><input type="text" class="hex" value="${act[k].toUpperCase()}" maxlength="7" spellcheck="false" autocapitalize="characters" aria-label="Código de ${esc(TEMA.ROLES[k].nombre)}"></div>`).join('');
+    $('#ap-c-reset').hidden = !Object.keys(mod).length;
+  }
   function pintarControles() {
     $('#ap-modelos').innerHTML = Object.keys(TEMA.MODELOS).map(k => `<button type="button" class="ap-modelo" role="radio" data-modelo="${k}" aria-checked="${ap.modelo === k}"><b>${esc(TEMA.MODELOS[k].nombre)}</b><span>${esc(TEMA.MODELOS[k].desc)}</span></button>`).join('');
     $('#ap-logos').innerHTML = Object.keys(TEMA.LOGOS).map(k => `<button type="button" class="ap-logo" role="radio" data-logo="${k}" aria-checked="${ap.logo === k}"><i style="-webkit-mask-image:url(${TEMA.LOGOS[k].img});mask-image:url(${TEMA.LOGOS[k].img})"></i><b>${esc(TEMA.LOGOS[k].nombre)}</b></button>`).join('');
     const pal = Object.keys(TEMA.PALETAS).map(k => { const p = TEMA.PALETAS[k]; return `<button type="button" class="ap-paleta" role="radio" data-paleta="${k}" aria-checked="${ap.paleta === k}"><i style="background:linear-gradient(90deg,${p.bg} 0 34%,${p.b} 34% 56%,${p.a} 56% 78%,${p.fg} 78%)"></i>${esc(p.nombre)}</button>`; });
-    const c = ap.colores || {};
-    pal.push(`<button type="button" class="ap-paleta" role="radio" data-paleta="personalizada" aria-checked="${ap.paleta === 'personalizada'}"><i style="background:linear-gradient(90deg,${c.fondo || '#222'} 0 34%,${c.acento2 || '#888'} 34% 56%,${c.acento || '#ccc'} 56% 78%,${c.texto || '#fff'} 78%)"></i>Personalizada</button>`);
     $('#ap-paletas').innerHTML = pal.join('');
-    $('#ap-custom').hidden = ap.paleta !== 'personalizada';
-    const b = Object.assign(colorBase(), ap.colores || {});
-    $('#ap-c-fondo').value = b.fondo; $('#ap-c-texto').value = b.texto; $('#ap-c-acento').value = b.acento; $('#ap-c-acento2').value = b.acento2;
+    pintarColores();
     $('#ap-f-tit').value = ap.fuenteTitulos; $('#ap-f-txt').value = ap.fuenteTexto;
     $('#ap-m-carrusel').checked = ap.mostrar.carrusel !== false; $('#ap-m-casas').checked = ap.mostrar.casas !== false; $('#ap-m-datos').checked = ap.mostrar.datos !== false;
     $('#ap-t-eyebrow').value = ap.textos.eyebrow || ''; $('#ap-t-lead').value = ap.textos.lead || '';
@@ -489,19 +491,29 @@ ${filas.join(',\n')}
   $('#ap-logos').addEventListener('click', e => { const b = e.target.closest('[data-logo]'); if (!b) return; ap.logo = b.dataset.logo; pintarControles(); vistaPrevia(); });
   $('#ap-paletas').addEventListener('click', e => {
     const b = e.target.closest('[data-paleta]'); if (!b) return;
-    if (b.dataset.paleta === 'personalizada' && ap.paleta !== 'personalizada') ap.colores = Object.assign(colorBase(), ap.colores || {});
-    ap.paleta = b.dataset.paleta; pintarControles(); vistaPrevia();
+    ap.paleta = b.dataset.paleta; ap.colores = {}; pintarControles(); vistaPrevia();
   });
-  [['fondo', '#ap-c-fondo'], ['texto', '#ap-c-texto'], ['acento', '#ap-c-acento'], ['acento2', '#ap-c-acento2']].forEach(([k, s]) => $(s).addEventListener('input', e => { ap.colores = Object.assign({}, ap.colores, { [k]: e.target.value }); vistaPrevia(); }));
+  function cambiarColor(fila, valor) {
+    if (!hexOk(valor)) return false;
+    ap.colores = Object.assign({}, ap.colores, { [fila.dataset.rol]: valor.toLowerCase() }); fila.classList.add('mod'); $('#ap-c-reset').hidden = false;
+    vistaPrevia(); return true;
+  }
+  $('#ap-custom').addEventListener('input', e => {
+    const fila = e.target.closest('[data-rol]'); if (!fila) return;
+    if (e.target.type === 'color') { if (cambiarColor(fila, e.target.value)) fila.querySelector('.hex').value = e.target.value.toUpperCase(); }
+    else { let v = e.target.value.trim(); if (v && v[0] !== '#') v = '#' + v; if (cambiarColor(fila, v)) fila.querySelector('input[type=color]').value = v; }
+  });
+  $('#ap-c-reset').addEventListener('click', () => { ap.colores = {}; pintarColores(); vistaPrevia(); });
   $('#ap-f-tit').addEventListener('change', e => { ap.fuenteTitulos = e.target.value; vistaPrevia(); });
   $('#ap-f-txt').addEventListener('change', e => { ap.fuenteTexto = e.target.value; vistaPrevia(); });
   [['carrusel', '#ap-m-carrusel'], ['casas', '#ap-m-casas'], ['datos', '#ap-m-datos']].forEach(([k, s]) => $(s).addEventListener('change', e => { ap.mostrar[k] = e.target.checked; vistaPrevia(); }));
   $('#ap-t-eyebrow').addEventListener('input', e => { ap.textos.eyebrow = e.target.value; vistaPrevia(); });
   $('#ap-t-lead').addEventListener('input', e => { ap.textos.lead = e.target.value; vistaPrevia(); });
+  $('#ap-original').addEventListener('click', () => { if (!confirm('¿Volver al diseño original? Se restauran modelo, logo, colores, letras y textos (aún no se publica).')) return; ap = TEMA.fusionar({}); pintarControles(); vistaPrevia(); toast('Diseño original listo. Toca Publicar apariencia para aplicarlo'); });
   $('#ap-reset').addEventListener('click', () => { ap = copia(apInicial || TEMA.fusionar({})); pintarControles(); vistaPrevia(); toast('Se restauró lo que está publicado'); });
 
   function ajustesLimpios() {
-    const o = { modelo: ap.modelo, logo: ap.logo, paleta: ap.paleta, colores: ap.paleta === 'personalizada' ? ap.colores : {}, fuenteTitulos: ap.fuenteTitulos, fuenteTexto: ap.fuenteTexto,
+    const o = { modelo: ap.modelo, logo: ap.logo, paleta: ap.paleta, colores: ap.colores || {}, fuenteTitulos: ap.fuenteTitulos, fuenteTexto: ap.fuenteTexto,
       mostrar: { carrusel: ap.mostrar.carrusel !== false, casas: ap.mostrar.casas !== false, datos: ap.mostrar.datos !== false },
       textos: { eyebrow: String(ap.textos.eyebrow || '').trim(), lead: String(ap.textos.lead || '').trim() } };
     return o;

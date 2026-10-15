@@ -4,8 +4,7 @@
 //  - modelo:   "sello" | "centrado" | "compacto"
 //  - logo:     "emblema" | "circulo" | "monograma" | "frasco"
 //  - paleta:   "violeta" | "medianoche" | "rosa" | "esmeralda" | "negro-oro" | "marfil" | "personalizada"
-//  - colores:  solo si paleta = "personalizada": { fondo, texto, acento, acento2 }
+//  - colores:  (opcional) cambia colores sueltos de la paleta: { fondo, texto, titulo, acento, acento2, detalle, tarjetas, logo } en formato #RRGGBB
 //  - fuenteTitulos / fuenteTexto: nombre de una fuente de Google Fonts (ver js/tema.js)
-//  - mostrar:  { carrusel, casas, datos }   ·   textos: { eyebrow, lead }
 // =========================================================
-const AJUSTES = {"modelo":"sello","logo":"emblema","paleta":"violeta","colores":{},"fuenteTitulos":"Open Sans","fuenteTexto":"Open Sans","mostrar":{"carrusel":true,"casas":true,"datos":true},"textos":{"eyebrow":"","lead":""}};
+const AJUSTES = {"modelo":"sello","logo":"emblema","paleta":"violeta","colores":{},"fuenteTitulos":"Roboto","fuenteTexto":"Roboto"};

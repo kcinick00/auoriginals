@@ -42,7 +42,7 @@
   };
   const DEFECTO = { modelo: 'sello', logo: 'emblema', paleta: 'violeta', colores: {}, fuenteTitulos: 'Roboto', fuenteTexto: 'Roboto',
     mostrar: { carrusel: true, casas: true, datos: true }, textos: { eyebrow: '', lead: '' } };
-  const fusionar = aj => { aj = aj || {}; const r = Object.assign({}, DEFECTO, aj); r.mostrar = Object.assign({}, DEFECTO.mostrar, aj.mostrar); r.textos = Object.assign({}, DEFECTO.textos, aj.textos); r.colores = aj.colores || {}; return r; };
+  const fusionar = aj => { aj = aj || {}; const r = Object.assign({}, DEFECTO, aj); r.mostrar = Object.assign({}, DEFECTO.mostrar, aj.mostrar); r.textos = Object.assign({}, DEFECTO.textos, aj.textos); r.colores = aj.colores || {}; if (r.paleta === 'personalizada') r.paleta = 'violeta'; return r; };
 
   const hex = h => { h = String(h || '').replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); const n = parseInt(h, 16); return isFinite(n) && h.length === 6 ? [n >> 16 & 255, n >> 8 & 255, n & 255] : [0, 0, 0]; };
   const toHex = c => '#' + c.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
@@ -50,13 +50,24 @@
   const lum = h => { const c = hex(h).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; };
   const rgb = h => hex(h).join(',');
 
+  // Los colores sueltos (aj.colores) se aplican sobre CUALQUIER paleta; lo que no se toque queda como la paleta.
+  const ROLES = {
+    fondo:    { nombre: 'Fondo',            desc: 'Color de toda la página' },
+    texto:    { nombre: 'Texto',            desc: 'Letras normales' },
+    titulo:   { nombre: 'Títulos',          desc: 'Letra grande de la portada y de las secciones' },
+    acento:   { nombre: 'Botones y precios', desc: 'Botones principales y precios' },
+    acento2:  { nombre: 'Brillo',           desc: 'Resplandor y círculo de la portada' },
+    detalle:  { nombre: 'Detalles',         desc: 'Etiquetas, enlaces y bordes suaves' },
+    tarjetas: { nombre: 'Tarjetas',         desc: 'Fondo de paneles, bolsa y fichas' },
+    logo:     { nombre: 'Logo',             desc: 'Color del logo' },
+  };
   function paletaDe(aj) {
-    if (aj.paleta === 'personalizada') {
-      const c = aj.colores || {}, p = PALETAS.violeta;
-      const a = c.acento || p.a, b = c.acento2 || p.b;
-      return { bg: c.fondo || p.bg, fg: c.texto || p.fg, a: a, b: b, c: mezcla(b, lum(c.fondo || p.bg) > .5 ? '#000000' : '#FFFFFF', .35) };
-    }
-    return PALETAS[aj.paleta] || PALETAS.violeta;
+    const c = aj.colores || {}, p = PALETAS[aj.paleta] || PALETAS.violeta;
+    const ok = k => /^#[0-9a-f]{6}$/i.test(c[k] || '') ? c[k] : null;
+    const bg = ok('fondo') || p.bg, fg = ok('texto') || p.fg, a = ok('acento') || p.a, b = ok('acento2') || p.b;
+    return { bg: bg, fg: fg, a: a, b: b,
+      c: ok('detalle') || (ok('acento2') ? mezcla(b, lum(bg) > .5 ? '#000000' : '#FFFFFF', .35) : p.c),
+      sup: ok('tarjetas'), logo: ok('logo') || a, tit: ok('titulo') || fg };
   }
 
   function variables(aj) {
@@ -66,6 +77,7 @@
     const v = {
       '--bg': p.bg, '--bg-2': mezcla(p.bg, p.fg, claro ? .035 : .045), '--surface': mezcla(p.bg, p.fg, claro ? .075 : .085), '--surface-2': mezcla(p.bg, p.fg, claro ? .12 : .14),
       '--deep': claro ? mezcla(p.bg, p.fg, .06) : mezcla(p.bg, '#000000', .45),
+      '--logo-col': p.logo, '--tit': p.tit,
       '--fg': p.fg, '--muted': mezcla(p.fg, p.bg, claro ? .42 : .38),
       '--gold': p.a, '--gold-deep': mezcla(p.a, '#000000', .25), '--gold-soft': 'rgba(' + rgb(p.a) + ',.15)',
       '--violet': p.b, '--violet-soft': 'rgba(' + rgb(p.b) + ',' + (claro ? .14 : .26) + ')', '--lav': p.c,
@@ -77,6 +89,7 @@
       '--logo-img': 'url("../' + (LOGOS[aj.logo] || LOGOS.emblema).img + '")',  // relativa a css/styles.css
       '--f-display': fam(aj.fuenteTitulos), '--f-sans': fam(aj.fuenteTexto),
     };
+    if (p.sup) { v['--surface'] = p.sup; v['--surface-2'] = mezcla(p.sup, p.fg, claro ? .08 : .08); v['--surface-rgb'] = rgb(p.sup); }
     return { vars: v, claro: claro, bg: p.bg };
   }
 
@@ -106,7 +119,7 @@
     return r;
   }
 
-  window.TEMA = { FUENTES, PALETAS, MODELOS, LOGOS, DEFECTO, fusionar, variables, urlFuentes, aplicar };
+  window.TEMA = { FUENTES, PALETAS, MODELOS, LOGOS, ROLES, paletaDe, DEFECTO, fusionar, variables, urlFuentes, aplicar };
 
   if (document.documentElement.dataset.temaAuto !== 'no') {
     let aj = typeof AJUSTES !== 'undefined' ? AJUSTES : {};

@@ -87,7 +87,7 @@ em{font-style:italic}
 .luna{position:absolute;z-index:-1;top:9%;right:8%;width:clamp(70px,9vw,120px);aspect-ratio:1;border-radius:50%;
   transform:rotate(-20deg);opacity:.9}
 .hero .wrap{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-block:80px 72px}
-.hero-mono{font-family:var(--f-display);font-weight:300;font-size:clamp(96px,15vw,210px);line-height:.86;letter-spacing:-.01em;margin:22px 0 0 -6px;color:var(--gold);text-shadow:0 0 50px rgba(var(--accent-rgb),.28)}
+.hero-mono{font-family:var(--f-display);font-weight:300;font-size:clamp(96px,15vw,210px);line-height:.86;letter-spacing:-.01em;margin:22px 0 0 -6px;color:var(--tit,var(--gold));text-shadow:0 0 50px rgba(var(--accent-rgb),.28)}
 .hero-mono span{display:block;font-size:.235em;letter-spacing:.62em;margin-top:.5em;padding-left:.1em;-webkit-text-fill-color:var(--fg);color:var(--fg);font-weight:400}
 .hero-firma{font-family:var(--f-display);font-style:italic;font-size:clamp(22px,2.4vw,28px);color:var(--muted);margin:24px 0 0}
 .hero-firma em{color:var(--gold)}
@@ -380,7 +380,7 @@ em{font-style:italic}
    v3 · Violeta: logo y detalles tomados del Instagram
    ========================================================= */
 .marca{flex-direction:row;gap:12px;align-items:center}
-.logo-mark{display:inline-block;background:var(--gold);-webkit-mask:var(--logo-img,url(../images/logos/emblema.svg)) center/contain no-repeat;mask:var(--logo-img,url(../images/logos/emblema.svg)) center/contain no-repeat}
+.logo-mark{display:inline-block;background:var(--logo-col,var(--gold));-webkit-mask:var(--logo-img,url(../images/logos/emblema.svg)) center/contain no-repeat;mask:var(--logo-img,url(../images/logos/emblema.svg)) center/contain no-repeat}
 .marca-logo{width:34px;height:37px;flex:none;filter:drop-shadow(0 0 12px rgba(var(--second-rgb),.6))}
 .marca-txt{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
 .marca-txt .marca-au{padding-left:0}
@@ -465,3 +465,5 @@ html[data-ocultar~="carrusel"] #destacados,html[data-ocultar~="casas"] .casas,ht
 html[data-logo="circulo"] .sello-logo{width:52%;aspect-ratio:1}
 html[data-logo="monograma"] .sello-logo{width:44%;aspect-ratio:1}
 html[data-logo="emblema"] .sello-logo{width:40%}
+
+h2,h3{color:var(--tit,inherit)}

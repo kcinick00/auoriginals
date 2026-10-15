@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css?v=1.4">
+<link rel="stylesheet" href="css/admin.css?v=1.5">
 </head>
 <body>
 
@@ -122,12 +122,9 @@
 
     <h3 class="ap-h">Colores</h3>
     <div class="ap-paletas" id="ap-paletas" role="radiogroup" aria-label="Combinación de colores"></div>
-    <div class="ap-custom" id="ap-custom" hidden>
-      <label>Fondo<input type="color" id="ap-c-fondo"></label>
-      <label>Texto<input type="color" id="ap-c-texto"></label>
-      <label>Acento<input type="color" id="ap-c-acento"></label>
-      <label>Brillo<input type="color" id="ap-c-acento2"></label>
-    </div>
+    <p class="ayuda" style="margin:12px 0 8px">Cambia cualquier color por separado: parte de la paleta elegida y solo se modifica lo que toques.</p>
+    <div class="ap-custom" id="ap-custom"></div>
+    <button class="btn" type="button" id="ap-c-reset" hidden>Volver a los colores de la paleta</button>
 
     <h3 class="ap-h">Letras</h3>
     <div class="campos">
@@ -146,6 +143,8 @@
       <label>Frase de la portada<textarea id="ap-t-lead" rows="3" maxlength="240" placeholder="Encuentra la esencia que conecta con tu personalidad…"></textarea></label>
     </div>
 
+    <button class="btn" type="button" id="ap-original" style="width:100%;margin-top:18px">Volver al diseño original (todo)</button>
+    <p class="ayuda" style="margin:6px 0 0">Deja modelo, logo, colores, letras y textos como venían al inicio. Luego toca Publicar apariencia.</p>
     <p class="error" id="ap-error" hidden></p>
     <div class="hoja-pie ap-pie">
       <button class="btn" type="button" id="ap-reset">Restablecer</button>
@@ -214,6 +213,6 @@
 <script src="ajustes.js"></script>
 <script src="js/tema.js"></script>
 <script src="js/frascos.js?v=2.1"></script>
-<script src="js/admin.js?v=1.4"></script>
+<script src="js/admin.js?v=1.6"></script>
 </body>
 </html>
