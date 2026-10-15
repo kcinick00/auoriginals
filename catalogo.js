@@ -7,9 +7,9 @@
 // =========================================================
 
 const CATALOGO = [
-  {"id":"adidas-ice-dive","marca":"Adidas","nombre":"Ice Dive","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":15,"imagen":"images/perfumes/adidas-ice-dive.jpg"},
+  {"id":"adidas-ice-dive","marca":"Adidas","nombre":"Ice Dive","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":2,"precio":15,"imagen":"images/perfumes/adidas-ice-dive.jpg"},
   {"id":"adidas-dynamic-pulse","marca":"Adidas","nombre":"Dynamic Pulse","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":15,"imagen":"images/perfumes/adidas-dynamic-pulse.jpg"},
-  {"id":"adidas-victory-league","marca":"Adidas","nombre":"Victory League","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":15,"imagen":"images/perfumes/adidas-victory-league.jpg"},
+  {"id":"adidas-victory-league","marca":"Adidas","nombre":"Victory League","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":2,"precio":15,"imagen":"images/perfumes/adidas-victory-league.jpg"},
   {"id":"afnan-9am","marca":"Afnan","nombre":"9am","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Hombre","stock":1,"precio":50,"imagen":"images/perfumes/afnan-9am-mv8yd88z.jpg"},
   {"id":"afnan-9pm","marca":"Afnan","nombre":"9pm","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Hombre","stock":2,"precio":60,"imagen":"images/perfumes/afnan-9pm.jpg"},
   {"id":"armaf-hunter-intense","marca":"Armaf","nombre":"Hunter Intense","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":45,"imagen":"images/perfumes/armaf-hunter-intense.jpg"},
