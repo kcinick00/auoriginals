@@ -54,7 +54,7 @@ Los cambios quedan guardados en el teléfono hasta que tocas **Publicar**. Al pu
 
 ## Tareas habituales
 
-**WhatsApp e Instagram** — ya configurados en `config.js` (`584247071667` y `@auoriginals`).
+**WhatsApp e Instagram** — ya configurados en `config.js` (`584124721159` y `@auoriginals`).
 Si cambian, edita `config.js` y también el texto del anuncio superior en `index.html`.
 
 **Tasa euro BCV (automática)** — la página consulta la tasa oficial del euro del BCV en
@@ -90,9 +90,21 @@ Para un dominio propio, crea un archivo `CNAME` con el dominio (por ejemplo `auo
 Basado en la estructura de [ricodelico](https://github.com/kcinick00/ricodelico) (PWA estática con pedidos por WhatsApp), rediseñado para perfumería.
 Tipografías: Bodoni Moda y Jost (Google Fonts).
 
-## Logo y estilo (v3 "Violeta")
+## Apariencia (modelo, colores y letras)
 
-El diseño toma los colores del Instagram @auoriginals: negro orquídea, violeta eléctrico, lavanda y el dorado del logo.
-- `images/logo.png` es el emblema dorado con fondo transparente (cabecera, portada) y `images/logo-circulo.png` la versión redonda del perfil.
-- Ambos se recortaron de una captura del perfil y tienen poca resolución. **Para que se vean nítidos, reemplázalos por el archivo original del logo** manteniendo los mismos nombres.
-- Las fotos reales de cada perfume se muestran sobre un pedestal lavanda; el fondo blanco de la foto se funde solo.
+Desde `admin.html` toca el botón de la **paleta de colores** (arriba). Allí puedes, con vista previa al instante:
+- elegir el **modelo de página**: Sello (logo grande a la derecha), Centrado o Compacto;
+- elegir la **combinación de colores** (Violeta, Medianoche, Rosa y oro, Esmeralda, Negro y oro, Marfil) o crear una **personalizada** con 4 colores;
+- elegir la **letra** de los títulos y del texto (Roboto por defecto, y otras 11 de Google Fonts);
+- mostrar u ocultar el carrusel, la cinta de marcas y los números, y cambiar la frase de la portada.
+
+Al tocar **Publicar apariencia** el panel guarda `ajustes.js` en el repositorio. También puedes editarlo a mano
+(las opciones están explicadas en el encabezado del archivo). `js/tema.js` es quien aplica esos ajustes en la tienda.
+Para probar sin publicar: `index.html?vista={"paleta":"rosa","modelo":"centrado"}`.
+
+## Logo y estilo
+
+- El logo es `images/logo.svg`: un frasco con las letras AU, de **un solo color** (toma el color de acento de la paleta elegida).
+  Para cambiarlo, reemplaza ese archivo por otro SVG de una sola forma/color (cualquier color, solo se usa su silueta).
+- Los íconos de la app (`icon-*.png`) y `images/og-image.jpg` se generaron con ese mismo logo.
+- Las fotos reales de cada perfume se muestran sobre un pedestal del color suave de la paleta; el fondo blanco de la foto se funde solo.

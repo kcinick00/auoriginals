@@ -33,11 +33,12 @@
   let cambios = store.get('cambios', {});   // id -> { campo: valor }   (solo lo que cambió)
   let nuevos = store.get('nuevos', []);     // perfumes agregados (objetos completos)
   let fotos = store.get('fotos', {});       // id -> { data: dataURL, tipo: 'jpg' | 'png' }
-  let filtro = 'todos', consulta = '', publicando = false;
+  let filtro = 'todos', consulta = '', publicando = false, avisoMemoria = false;
+  const esperar = ms => new Promise(r => setTimeout(r, ms));
 
   const guardar = () => {
     store.set('cambios', cambios); store.set('nuevos', nuevos);
-    if (!store.set('fotos', fotos)) toast('La foto es grande: publica antes de cerrar el panel');
+    if (!store.set('fotos', fotos) && !avisoMemoria) { avisoMemoria = true; toast('Hay muchas fotos para guardar en el teléfono: publica antes de cerrar el panel'); }
   };
   const esNuevo = id => nuevos.some(n => n.id === id);
   const ids = () => new Set([...Object.keys(cambios), ...nuevos.map(n => n.id), ...Object.keys(fotos)]);
@@ -299,7 +300,10 @@
         : r.status === 404 ? 'No se encontró el repositorio o el archivo. Revisa el nombre del repositorio y la rama en Ajustes.'
         : r.status === 409 || r.status === 422 ? 'El catálogo cambió en otro lugar mientras publicabas.'
         : 'GitHub respondió con un error (' + r.status + ').';
-      const x = new Error(msg); x.status = r.status; throw x;
+      const x = new Error(msg); x.status = r.status;
+      x.retryAfter = parseInt(r.headers.get('retry-after'), 10) || 0;
+      if (!x.retryAfter && r.status === 403) { try { const j = await r.json(); if (/secondary|rate limit/i.test(j.message || '')) x.retryAfter = 60; } catch (e) { /* sin cuerpo */ } }
+      throw x;
     }
     return r.json();
   }
@@ -334,6 +338,16 @@ ${filas.join(',\n')}
     return { lista: parsear(textoB64(j.content)), sha: j.sha };
   }
 
+  async function ghReintento(metodo, ruta, cuerpo) {
+    for (let i = 0; ; i++) {
+      try { return await gh(metodo, ruta, cuerpo); }
+      catch (e) {
+        if ((e.status === 403 || e.status === 429) && e.retryAfter && i < 3) { progreso(`GitHub pide esperar ${e.retryAfter} s…`); await esperar(e.retryAfter * 1000 + 500); continue; }
+        throw e;
+      }
+    }
+  }
+
   // ---------- publicar ----------
   function progreso(txt) { $('#progreso').hidden = !txt; if (txt) $('#progreso-txt').textContent = txt; }
 
@@ -346,10 +360,11 @@ ${filas.join(',\n')}
       const idsFoto = Object.keys(fotos);
       for (let i = 0; i < idsFoto.length; i++) {
         const id = idsFoto[i], f = fotos[id];
-        progreso(`Subiendo foto ${i + 1} de ${idsFoto.length}…`);
+        progreso(`Subiendo foto ${i + 1} de ${idsFoto.length}…${idsFoto.length > 20 ? ' (tarda un poco, no cierres)' : ''}`);
         const ruta = `images/perfumes/${id}-${Date.now().toString(36)}.${f.tipo}`;
-        await gh('PUT', '/contents/' + ruta, { message: 'Foto: ' + id, content: f.data.split(',')[1], branch: cfg.branch });
+        await ghReintento('PUT', '/contents/' + ruta, { message: 'Foto: ' + id, content: f.data.split(',')[1], branch: cfg.branch });
         subidas[id] = ruta;
+        if (idsFoto.length > 20 && i < idsFoto.length - 1) await esperar(1000);   // GitHub limita las escrituras seguidas
       }
       let ultimo = null;
       for (let intento = 0; intento < 2; intento++) {
@@ -383,6 +398,127 @@ ${filas.join(',\n')}
     if (!confirmandoDescarte) { confirmandoDescarte = true; b.textContent = '¿Seguro?'; setTimeout(() => { confirmandoDescarte = false; b.textContent = 'Descartar'; }, 3000); return; }
     confirmandoDescarte = false; b.textContent = 'Descartar';
     cambios = {}; nuevos = []; fotos = {}; guardar(); render(); toast('Cambios descartados');
+  });
+
+
+  // ---------- fotos en lote ----------
+  const dlgLote = $('#hoja-lote');
+  let lote = [];   // [{ id, file }]
+  $('#btn-lote').addEventListener('click', () => { lote = []; $('#lote-file').value = ''; $('#lote-res').innerHTML = ''; $('#lote-ok').disabled = true; dlgLote.showModal(); });
+  $('#lote-file').addEventListener('change', () => {
+    const archivos = Array.from($('#lote-file').files), porId = new Map(), sin = [];
+    const conocidos = new Set(todos().map(p => p.id));
+    archivos.forEach(f => {
+      const id = slug(f.name.replace(/\.[^.]+$/, ''));
+      if (conocidos.has(id)) porId.set(id, f); else sin.push(f.name);
+    });
+    lote = Array.from(porId, ([id, file]) => ({ id, file }));
+    $('#lote-res').innerHTML = `<span class="si"><b>${lote.length}</b> foto${lote.length === 1 ? '' : 's'} coinciden con un perfume.</span>` +
+      (sin.length ? `<br><span class="no"><b>${sin.length}</b> sin coincidencia (se omiten):</span><ul>${sin.slice(0, 12).map(n => `<li>${esc(n)}</li>`).join('')}${sin.length > 12 ? `<li>…y ${sin.length - 12} más</li>` : ''}</ul>` : '');
+    $('#lote-ok').disabled = !lote.length;
+  });
+  $('#f-lote').addEventListener('submit', async e => {
+    e.preventDefault();
+    const ok = $('#lote-ok'), res = $('#lote-res'), sinFondo = $('#lote-sinfondo').checked;
+    ok.disabled = true; let hechas = 0; const fallas = [];
+    res.innerHTML = '<b>Procesando…</b><div class="barra-lote"><i id="lote-barra"></i></div><p id="lote-prog"></p>';
+    for (const it of lote) {
+      $('#lote-prog').textContent = `${hechas + fallas.length + 1} de ${lote.length} · ${it.file.name}`;
+      try {
+        const r = await procesarFoto(it.file, sinFondo);
+        if (!r.data) throw new Error(r.nota);
+        fotos[it.id] = { data: r.data, tipo: r.tipo };
+        if (!esNuevo(it.id) && cambios[it.id]) { delete cambios[it.id].imagen; if (!Object.keys(cambios[it.id]).length) delete cambios[it.id]; }
+        hechas++;
+      } catch (err) { fallas.push(it.file.name); }
+      $('#lote-barra').style.width = Math.round((hechas + fallas.length) / lote.length * 100) + '%';
+      await esperar(0);
+    }
+    guardar(); render();
+    if (!fallas.length) { dlgLote.close(); toast(`${hechas} fotos listas. Toca Publicar.`); aviso(`${hechas} fotos listas para publicar. Revisa la lista y toca Publicar.`, 'ok'); }
+    else res.innerHTML = `<span class="si"><b>${hechas}</b> listas.</span><br><span class="no"><b>${fallas.length}</b> no se pudieron procesar:</span><ul>${fallas.map(n => `<li>${esc(n)}</li>`).join('')}</ul><p>Prueba esas sin quitar el fondo, o desde el editor de cada perfume.</p>`;
+  });
+
+  // ---------- apariencia (modelo, colores, letras) ----------
+  const dlgAp = $('#hoja-apariencia'), pv = $('#ap-prev');
+  const CAB_AJ = '// =========================================================\n// ajustes.js · Apariencia de la tienda (AU Originals)\n// Lo actualiza el panel admin.html (botón de paleta) y también se puede editar a mano.\n//  - modelo:   "sello" | "centrado" | "compacto"\n//  - paleta:   "violeta" | "medianoche" | "rosa" | "esmeralda" | "negro-oro" | "marfil" | "personalizada"\n//  - colores:  solo si paleta = "personalizada": { fondo, texto, acento, acento2 }\n//  - fuenteTitulos / fuenteTexto: nombre de una fuente de Google Fonts (ver js/tema.js)\n//  - mostrar:  { carrusel, casas, datos }   ·   textos: { eyebrow, lead }\n// =========================================================\n';
+  let ap = null, apInicial = null;
+  const copia = o => JSON.parse(JSON.stringify(o));
+  const publicadoAj = () => TEMA.fusionar(typeof AJUSTES !== 'undefined' ? copia(AJUSTES) : {});
+
+  function pintarVistaPrevia() {
+    try { if (pv.contentWindow && pv.contentWindow.TEMA) pv.contentWindow.TEMA.aplicar(copia(ap)); } catch (e) { /* aún cargando */ }
+  }
+  let tAp; const vistaPrevia = () => { clearTimeout(tAp); tAp = setTimeout(pintarVistaPrevia, 60); store.set('apariencia', ap); };
+  pv.addEventListener('load', pintarVistaPrevia);
+
+  function colorBase() { const p = TEMA.PALETAS[ap.paleta] || TEMA.PALETAS.violeta; return { fondo: p.bg, texto: p.fg, acento: p.a, acento2: p.b }; }
+  function pintarControles() {
+    $('#ap-modelos').innerHTML = Object.keys(TEMA.MODELOS).map(k => `<button type="button" class="ap-modelo" role="radio" data-modelo="${k}" aria-checked="${ap.modelo === k}"><b>${esc(TEMA.MODELOS[k].nombre)}</b><span>${esc(TEMA.MODELOS[k].desc)}</span></button>`).join('');
+    const pal = Object.keys(TEMA.PALETAS).map(k => { const p = TEMA.PALETAS[k]; return `<button type="button" class="ap-paleta" role="radio" data-paleta="${k}" aria-checked="${ap.paleta === k}"><i style="background:linear-gradient(90deg,${p.bg} 0 34%,${p.b} 34% 56%,${p.a} 56% 78%,${p.fg} 78%)"></i>${esc(p.nombre)}</button>`; });
+    const c = ap.colores || {};
+    pal.push(`<button type="button" class="ap-paleta" role="radio" data-paleta="personalizada" aria-checked="${ap.paleta === 'personalizada'}"><i style="background:linear-gradient(90deg,${c.fondo || '#222'} 0 34%,${c.acento2 || '#888'} 34% 56%,${c.acento || '#ccc'} 56% 78%,${c.texto || '#fff'} 78%)"></i>Personalizada</button>`);
+    $('#ap-paletas').innerHTML = pal.join('');
+    $('#ap-custom').hidden = ap.paleta !== 'personalizada';
+    const b = Object.assign(colorBase(), ap.colores || {});
+    $('#ap-c-fondo').value = b.fondo; $('#ap-c-texto').value = b.texto; $('#ap-c-acento').value = b.acento; $('#ap-c-acento2').value = b.acento2;
+    $('#ap-f-tit').value = ap.fuenteTitulos; $('#ap-f-txt').value = ap.fuenteTexto;
+    $('#ap-m-carrusel').checked = ap.mostrar.carrusel !== false; $('#ap-m-casas').checked = ap.mostrar.casas !== false; $('#ap-m-datos').checked = ap.mostrar.datos !== false;
+    $('#ap-t-eyebrow').value = ap.textos.eyebrow || ''; $('#ap-t-lead').value = ap.textos.lead || '';
+  }
+  (function opcionesFuentes() {
+    const o = Object.keys(TEMA.FUENTES).map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+    $('#ap-f-tit').innerHTML = o; $('#ap-f-txt').innerHTML = o;
+  })();
+
+  function leerAjustesRemotos(texto) { const m = /const AJUSTES\s*=\s*(\{[\s\S]*?\});/.exec(texto); if (!m) return null; try { return JSON.parse(m[1]); } catch (e) { return null; } }
+  async function abrirApariencia() {
+    $('#ap-error').hidden = true;
+    ap = TEMA.fusionar(store.get('apariencia', null) || publicadoAj());
+    apInicial = copia(publicadoAj());
+    if (conectado()) {                                       // si hay conexión, parte de lo que está publicado ahora
+      try { const j = await gh('GET', '/contents/ajustes.js'); const r = leerAjustesRemotos(textoB64(j.content)); if (r) { apInicial = TEMA.fusionar(r); if (!store.get('apariencia', null)) ap = copia(apInicial); } } catch (e) { /* se usa la copia local */ }
+    }
+    pintarControles();
+    if (!pv.getAttribute('src')) pv.src = './index.html'; else pintarVistaPrevia();
+    dlgAp.showModal();
+  }
+  $('#btn-apariencia').addEventListener('click', abrirApariencia);
+  $('#ap-modelos').addEventListener('click', e => { const b = e.target.closest('[data-modelo]'); if (!b) return; ap.modelo = b.dataset.modelo; pintarControles(); vistaPrevia(); });
+  $('#ap-paletas').addEventListener('click', e => {
+    const b = e.target.closest('[data-paleta]'); if (!b) return;
+    if (b.dataset.paleta === 'personalizada' && ap.paleta !== 'personalizada') ap.colores = Object.assign(colorBase(), ap.colores || {});
+    ap.paleta = b.dataset.paleta; pintarControles(); vistaPrevia();
+  });
+  [['fondo', '#ap-c-fondo'], ['texto', '#ap-c-texto'], ['acento', '#ap-c-acento'], ['acento2', '#ap-c-acento2']].forEach(([k, s]) => $(s).addEventListener('input', e => { ap.colores = Object.assign({}, ap.colores, { [k]: e.target.value }); vistaPrevia(); }));
+  $('#ap-f-tit').addEventListener('change', e => { ap.fuenteTitulos = e.target.value; vistaPrevia(); });
+  $('#ap-f-txt').addEventListener('change', e => { ap.fuenteTexto = e.target.value; vistaPrevia(); });
+  [['carrusel', '#ap-m-carrusel'], ['casas', '#ap-m-casas'], ['datos', '#ap-m-datos']].forEach(([k, s]) => $(s).addEventListener('change', e => { ap.mostrar[k] = e.target.checked; vistaPrevia(); }));
+  $('#ap-t-eyebrow').addEventListener('input', e => { ap.textos.eyebrow = e.target.value; vistaPrevia(); });
+  $('#ap-t-lead').addEventListener('input', e => { ap.textos.lead = e.target.value; vistaPrevia(); });
+  $('#ap-reset').addEventListener('click', () => { ap = copia(apInicial || TEMA.fusionar({})); pintarControles(); vistaPrevia(); toast('Se restauró lo que está publicado'); });
+
+  function ajustesLimpios() {
+    const o = { modelo: ap.modelo, paleta: ap.paleta, colores: ap.paleta === 'personalizada' ? ap.colores : {}, fuenteTitulos: ap.fuenteTitulos, fuenteTexto: ap.fuenteTexto,
+      mostrar: { carrusel: ap.mostrar.carrusel !== false, casas: ap.mostrar.casas !== false, datos: ap.mostrar.datos !== false },
+      textos: { eyebrow: String(ap.textos.eyebrow || '').trim(), lead: String(ap.textos.lead || '').trim() } };
+    return o;
+  }
+  $('#f-apariencia').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('#ap-error'); err.hidden = true;
+    if (!conectado()) { err.textContent = 'Primero conecta el panel con GitHub (⚙ Ajustes) para poder publicar la apariencia.'; err.hidden = false; return; }
+    progreso('Guardando apariencia…');
+    try {
+      const cuerpo = CAB_AJ + 'const AJUSTES = ' + JSON.stringify(ajustesLimpios()) + ';\n';
+      for (let intento = 0; intento < 2; intento++) {
+        let sha; try { sha = (await gh('GET', '/contents/ajustes.js')).sha; } catch (x) { if (x.status !== 404) throw x; }
+        try { await ghReintento('PUT', '/contents/ajustes.js', Object.assign({ message: 'Apariencia: ' + ap.modelo + ' · ' + ap.paleta + ' · ' + ap.fuenteTitulos, content: b64Texto(cuerpo), branch: cfg.branch }, sha ? { sha } : {})); break; }
+        catch (x) { if (!(x.status === 409 || x.status === 422) || intento) throw x; }
+      }
+      store.set('apariencia', null); apInicial = copia(ap); progreso(''); dlgAp.close();
+      aviso('Apariencia publicada. Tus clientes la verán en uno o dos minutos.', 'ok');
+    } catch (x) { progreso(''); err.textContent = x.message; err.hidden = false; }
   });
 
   // ---------- ajustes ----------

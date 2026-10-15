@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-tema-auto="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -12,17 +12,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css?v=1.2">
+<link rel="stylesheet" href="css/admin.css?v=1.3">
 </head>
 <body>
 
 <header class="top">
   <div class="top-in">
-    <div class="tit"><img src="images/logo-circulo.png" alt="" width="28" height="28" style="border-radius:50%;margin-right:8px;vertical-align:middle"><b>AU</b><span>Admin</span></div>
+    <div class="tit"><span aria-hidden="true" style="display:inline-block;width:24px;height:26px;margin-right:9px;vertical-align:middle;background:var(--gold);-webkit-mask:url(images/logo.svg) center/contain no-repeat;mask:url(images/logo.svg) center/contain no-repeat"></span><b>AU</b><span>Admin</span></div>
     <button class="estado" id="estado" type="button" data-modo="local" aria-label="Estado de la conexión">Solo vista</button>
     <a class="ib" id="ver-sitio" href="./" target="_blank" rel="noopener" aria-label="Ver la tienda pública">
       <svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
     </a>
+    <button class="ib" id="btn-apariencia" type="button" aria-label="Apariencia de la tienda">
+      <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.2" r="1"/><circle cx="14.5" cy="7.2" r="1"/></svg>
+    </button>
     <button class="ib" id="btn-lote" type="button" aria-label="Subir fotos en lote">
       <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>
     </button>
@@ -101,6 +104,54 @@
   </form>
 </dialog>
 
+<!-- ===== Apariencia ===== -->
+<dialog class="hoja hoja-ap" id="hoja-apariencia" aria-labelledby="ap-titulo">
+  <form id="f-apariencia" method="dialog" novalidate>
+    <div class="hoja-cab">
+      <h2 id="ap-titulo">Apariencia de la tienda</h2>
+      <button class="ib" type="button" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <p class="ayuda">Cambia el modelo, los colores y las letras. La vista previa se actualiza al instante; los clientes lo ven cuando toques <b>Publicar apariencia</b>.</p>
+    <div class="ap-prev-caja"><iframe id="ap-prev" title="Vista previa de la tienda" loading="lazy"></iframe></div>
+
+    <h3 class="ap-h">Modelo de página</h3>
+    <div class="ap-modelos" id="ap-modelos" role="radiogroup" aria-label="Modelo de página"></div>
+
+    <h3 class="ap-h">Colores</h3>
+    <div class="ap-paletas" id="ap-paletas" role="radiogroup" aria-label="Combinación de colores"></div>
+    <div class="ap-custom" id="ap-custom" hidden>
+      <label>Fondo<input type="color" id="ap-c-fondo"></label>
+      <label>Texto<input type="color" id="ap-c-texto"></label>
+      <label>Acento<input type="color" id="ap-c-acento"></label>
+      <label>Brillo<input type="color" id="ap-c-acento2"></label>
+    </div>
+
+    <h3 class="ap-h">Letras</h3>
+    <div class="campos">
+      <label>Letra de los títulos<select id="ap-f-tit"></select></label>
+      <label>Letra del texto<select id="ap-f-txt"></select></label>
+    </div>
+
+    <h3 class="ap-h">Portada</h3>
+    <div class="ap-checks">
+      <label class="check"><input type="checkbox" id="ap-m-carrusel"> Mostrar "Los que más se piden"</label>
+      <label class="check"><input type="checkbox" id="ap-m-casas"> Mostrar la cinta de marcas</label>
+      <label class="check"><input type="checkbox" id="ap-m-datos"> Mostrar los números (fragancias, casas, desde)</label>
+    </div>
+    <div class="campos">
+      <label>Línea pequeña sobre el título<input id="ap-t-eyebrow" maxlength="80" autocomplete="off" placeholder="AU Perfumes · Fragancias · Colección de octubre"></label>
+      <label>Frase de la portada<textarea id="ap-t-lead" rows="3" maxlength="240" placeholder="Encuentra la esencia que conecta con tu personalidad…"></textarea></label>
+    </div>
+
+    <p class="error" id="ap-error" hidden></p>
+    <div class="hoja-pie ap-pie">
+      <button class="btn" type="button" id="ap-reset">Restablecer</button>
+      <button class="btn" type="button" data-cerrar>Cerrar</button>
+      <button class="btn primario" type="submit">Publicar apariencia</button>
+    </div>
+  </form>
+</dialog>
+
 <!-- ===== Fotos en lote ===== -->
 <dialog class="hoja" id="hoja-lote" aria-labelledby="lote-titulo">
   <form id="f-lote" method="dialog" novalidate>
@@ -157,7 +208,9 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="catalogo.js?v=3"></script>
+<script src="ajustes.js"></script>
+<script src="js/tema.js"></script>
 <script src="js/frascos.js?v=2.1"></script>
-<script src="js/admin.js?v=1.2"></script>
+<script src="js/admin.js?v=1.3"></script>
 </body>
 </html>

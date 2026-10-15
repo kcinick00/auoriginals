@@ -131,3 +131,22 @@ svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke
 .lote-res ul{margin:6px 0 0;padding-left:18px;font-size:13px;word-break:break-all}
 .barra-lote{height:4px;background:var(--line);border-radius:2px;margin-top:10px;overflow:hidden}
 .barra-lote i{display:block;height:100%;width:0;background:var(--gold);transition:width .2s}
+
+/* apariencia */
+.hoja-ap{width:min(640px,100%)}
+.ap-prev-caja{border:1px solid var(--line-strong);background:#000;border-radius:10px;overflow:hidden;margin:10px 0 4px}
+#ap-prev{display:block;width:100%;height:340px;border:0;background:#000}
+.ap-h{font-family:var(--f-display);font-weight:400;font-size:17px;margin:22px 0 8px;color:var(--fg)}
+.ap-modelos{display:grid;gap:8px}
+.ap-modelo{display:flex;flex-direction:column;gap:2px;text-align:left;border:1px solid var(--line-strong);border-radius:10px;padding:11px 14px;background:none;color:var(--fg);cursor:pointer;font:inherit}
+.ap-modelo b{font-weight:500;font-size:14px;letter-spacing:.04em}.ap-modelo span{font-size:13px;color:var(--muted)}
+.ap-modelo[aria-checked="true"],.ap-paleta[aria-checked="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.ap-paletas{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.ap-paleta{display:flex;flex-direction:column;gap:7px;align-items:flex-start;border:1px solid var(--line-strong);border-radius:10px;padding:9px;background:none;color:var(--fg);cursor:pointer;font:inherit;font-size:13px}
+.ap-paleta i{display:block;width:100%;height:30px;border-radius:6px;border:1px solid rgba(255,255,255,.15)}
+.ap-custom{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.ap-custom label{display:flex;flex-direction:column;gap:5px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ap-custom input[type=color]{width:100%;height:42px;padding:2px;border:1px solid var(--line-strong);border-radius:8px;background:var(--bg-2)}
+.ap-checks{display:grid;gap:10px;margin-bottom:12px}
+.campos textarea{width:100%;min-width:0;border:1px solid var(--line-strong);background:var(--bg-2);border-radius:10px;padding:10px 12px;font-size:16px;letter-spacing:0;text-transform:none;color:var(--fg);outline:none;font-family:inherit;resize:vertical}
+.ap-pie .btn{padding:0 10px}
