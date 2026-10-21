@@ -32,16 +32,17 @@
   let modo = 'local';                       // 'github' | 'local'
   let cambios = store.get('cambios', {});   // id -> { campo: valor }   (solo lo que cambió)
   let nuevos = store.get('nuevos', []);     // perfumes agregados (objetos completos)
+  let borrados = store.get('borrados', []); // ids de perfumes que se van a eliminar al publicar
   let fotos = store.get('fotos', {});       // id -> { data: dataURL, tipo: 'jpg' | 'png' }
   let filtro = 'todos', consulta = '', publicando = false, avisoMemoria = false;
   const esperar = ms => new Promise(r => setTimeout(r, ms));
 
   const guardar = () => {
-    store.set('cambios', cambios); store.set('nuevos', nuevos);
+    store.set('cambios', cambios); store.set('nuevos', nuevos); store.set('borrados', borrados);
     if (!store.set('fotos', fotos) && !avisoMemoria) { avisoMemoria = true; toast('Hay muchas fotos para guardar en el teléfono: publica antes de cerrar el panel'); }
   };
   const esNuevo = id => nuevos.some(n => n.id === id);
-  const ids = () => new Set([...Object.keys(cambios), ...nuevos.map(n => n.id), ...Object.keys(fotos)]);
+  const ids = () => new Set([...Object.keys(cambios), ...nuevos.map(n => n.id), ...Object.keys(fotos), ...borrados]);
   const baseDe = id => base.find(p => p.id === id);
 
   // perfume tal como se ve ahora (con borradores aplicados)
@@ -50,7 +51,7 @@
     if (fotos[v.id]) v.imagen = fotos[v.id].data;
     return v;
   }
-  const todos = () => base.map(vista).concat(nuevos.map(vista));
+  const todos = () => base.filter(p => !borrados.includes(p.id)).map(vista).concat(nuevos.map(vista));
 
   // ---------- utilidades de interfaz ----------
   let tt;
@@ -67,12 +68,12 @@
   // ---------- lista ----------
   function filaHTML(p) {
     const mod = ids().has(p.id);
-    return `<article class="fila${mod ? ' mod' : ''}" data-id="${esc(p.id)}">
+    return `<article class="fila${mod ? ' mod' : ''}${p.oculto ? ' pausada' : ''}" data-id="${esc(p.id)}">
       <button class="th" type="button" data-editar aria-label="Editar ${esc(p.nombre)}">${miniatura(p)}</button>
       <button class="dat" type="button" data-editar>
         <span class="m">${esc(p.marca)}</span>
         <span class="n">${esc(p.nombre)}</span>
-        <span class="x">${esc(abrev(p.presentacion))} · ${esc(p.tamano)} · ${GEN[p.genero] || p.genero}${p.imagen ? '' : ' <span class="tag w">Sin foto</span>'}${esNuevo(p.id) ? ' <span class="tag">Nuevo</span>' : ''}</span>
+        <span class="x">${esc(abrev(p.presentacion))} · ${esc(p.tamano)} · ${GEN[p.genero] || p.genero}${p.imagen ? '' : ' <span class="tag w">Sin foto</span>'}${esNuevo(p.id) ? ' <span class="tag">Nuevo</span>' : ''}${p.oculto ? ' <span class="tag w">Pausado</span>' : ''}</span>
       </button>
       <div class="ed">
         <label class="precio"><span>$</span><input inputmode="decimal" data-precio value="${precioTxt(p.precio)}" aria-label="Precio de ${esc(p.nombre)}"></label>
@@ -84,6 +85,7 @@
   function coincide(p) {
     if (filtro === 'sinfoto' && p.imagen) return false;
     if (filtro === 'agotado' && p.stock > 0) return false;
+    if (filtro === 'pausado' && !p.oculto) return false;
     if (filtro === 'cambios' && !ids().has(p.id)) return false;
     if (['Hombre', 'Mujer', 'Unisex'].includes(filtro) && p.genero !== filtro) return false;
     const q = norm(consulta.trim());
@@ -93,7 +95,7 @@
   function render() {
     const lista = todos().filter(coincide);
     $('#lista').innerHTML = lista.length ? lista.map(filaHTML).join('') : '<div class="vacio">No hay perfumes con ese filtro.</div>';
-    $('#conteo').textContent = `${lista.length} de ${base.length + nuevos.length} perfumes`;
+    $('#conteo').textContent = `${lista.length} de ${base.length - borrados.length + nuevos.length} perfumes`;
     $$('#chips button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === filtro));
     actualizarPie();
   }
@@ -229,6 +231,8 @@
     const p = nuevo ? { id: '', marca: '', nombre: '', presentacion: 'Eau de Parfum', tamano: '100 ml', genero: 'Hombre', stock: 1, precio: 0, imagen: '' } : todos().find(x => x.id === id);
     ed = { id, nuevo, borrador: p, file: null, foto: null, quitar: false };
     $('#ed-titulo').textContent = nuevo ? 'Perfume nuevo' : 'Editar perfume';
+    $('#ed-borrar').hidden = nuevo; resetBorrar();
+    $('#ed-pausar').hidden = $('#ed-pausar-msg').hidden = nuevo; pintarPausa(p);
     $('#ed-marca').value = p.marca; $('#ed-nombre').value = p.nombre; $('#ed-pres').value = p.presentacion;
     $('#ed-tamano').value = p.tamano; $('#ed-genero').value = p.genero; $('#ed-precio').value = nuevo ? '' : precioTxt(p.precio); $('#ed-stock').value = p.stock;
     $('#ed-file').value = ''; $('#ed-foto-msg').textContent = 'Mejor con la botella sola, de frente y sobre fondo blanco.';
@@ -274,6 +278,31 @@
     if (ed.foto) { fotos[id] = { data: ed.foto.data, tipo: ed.foto.tipo }; if (!ed.nuevo) { const c = cambios[id]; if (c) { delete c.imagen; if (!Object.keys(c).length) delete cambios[id]; } } }
     else if (ed.quitar) { delete fotos[id]; poner(id, 'imagen', ''); }
     guardar(); dlgEd.close(); render(); toast(ed.nuevo ? 'Perfume agregado a los cambios' : 'Cambios guardados');
+  });
+  // pausar / reactivar la publicación de un perfume (no se borra: solo se oculta de la tienda)
+  function pintarPausa(p) {
+    $('#ed-pausar').textContent = p.oculto ? 'Reactivar publicación' : 'Pausar publicación';
+    $('#ed-pausar-msg').textContent = p.oculto ? 'Está pausado: los clientes no lo ven. Reactívalo para volver a mostrarlo.' : 'Lo oculta de la tienda sin borrarlo. Lo reactivas cuando quieras.';
+  }
+  $('#ed-pausar').addEventListener('click', () => {
+    if (!ed || ed.nuevo) return;
+    const p = todos().find(x => x.id === ed.id); if (!p) return;
+    const pausar = !p.oculto;
+    poner(ed.id, 'oculto', pausar ? true : undefined);
+    dlgEd.close(); render();
+    toast(pausar ? 'Pausado. Toca Publicar para ocultarlo de la tienda' : 'Reactivado. Toca Publicar para mostrarlo otra vez');
+  });
+  // eliminar un perfume (se confirma con un segundo toque; se publica con el botón Publicar)
+  let confBorrar = false, tBorrar;
+  function resetBorrar() { confBorrar = false; clearTimeout(tBorrar); const b = $('#ed-borrar'); if (b) b.textContent = 'Eliminar perfume'; }
+  $('#ed-borrar').addEventListener('click', () => {
+    if (!ed || ed.nuevo) return;
+    const b = $('#ed-borrar');
+    if (!confBorrar) { confBorrar = true; b.textContent = '¿Seguro? Toca otra vez para eliminar'; tBorrar = setTimeout(resetBorrar, 4000); return; }
+    const id = ed.id;
+    if (esNuevo(id)) nuevos = nuevos.filter(n => n.id !== id); else if (!borrados.includes(id)) borrados.push(id);
+    delete cambios[id]; delete fotos[id];
+    resetBorrar(); guardar(); dlgEd.close(); render(); toast('Perfume eliminado. Toca Publicar para que desaparezca de la tienda');
   });
   $('#btn-nuevo').addEventListener('click', () => abrirEditor(null));
   $$('dialog [data-cerrar]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
@@ -371,7 +400,7 @@ ${filas.join(',\n')}
         progreso('Guardando catálogo…');
         const remoto = await cargarRemoto();
         const mapa = new Map(remoto.lista.map(p => [p.id, p]));
-        const final = remoto.lista.map(p => {
+        const final = remoto.lista.filter(p => !borrados.includes(p.id)).map(p => {
           const v = Object.assign({}, p, cambios[p.id] || {});
           if (subidas[p.id]) v.imagen = subidas[p.id];
           return v;
@@ -382,7 +411,7 @@ ${filas.join(',\n')}
           ultimo = final; break;
         } catch (e) { if (!(e.status === 409 || e.status === 422) || intento) throw e; }
       }
-      base = ultimo; cambios = {}; nuevos = []; fotos = {}; guardar();
+      base = ultimo; cambios = {}; nuevos = []; fotos = {}; borrados = []; guardar();
       progreso(''); render();
       aviso('Publicado. Tus clientes verán los cambios en uno o dos minutos.', 'ok');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -397,7 +426,7 @@ ${filas.join(',\n')}
     const b = e.currentTarget;
     if (!confirmandoDescarte) { confirmandoDescarte = true; b.textContent = '¿Seguro?'; setTimeout(() => { confirmandoDescarte = false; b.textContent = 'Descartar'; }, 3000); return; }
     confirmandoDescarte = false; b.textContent = 'Descartar';
-    cambios = {}; nuevos = []; fotos = {}; guardar(); render(); toast('Cambios descartados');
+    cambios = {}; nuevos = []; fotos = {}; borrados = []; guardar(); render(); toast('Cambios descartados');
   });
 
 

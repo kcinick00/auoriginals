@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css?v=1.5">
+<link rel="stylesheet" href="css/admin.css?v=1.7">
 </head>
 <body>
 
@@ -46,6 +46,7 @@
       <button type="button" data-f="todos" aria-pressed="true">Todos</button>
       <button type="button" data-f="sinfoto" aria-pressed="false">Sin foto</button>
       <button type="button" data-f="agotado" aria-pressed="false">Agotados</button>
+      <button type="button" data-f="pausado" aria-pressed="false">Pausados</button>
       <button type="button" data-f="cambios" aria-pressed="false">Con cambios</button>
       <button type="button" data-f="Hombre" aria-pressed="false">Ellos</button>
       <button type="button" data-f="Mujer" aria-pressed="false">Ellas</button>
@@ -97,6 +98,9 @@
       <label>Existencias<input id="ed-stock" inputmode="numeric" autocomplete="off"></label>
     </div>
     <p class="error" id="ed-error" hidden></p>
+    <button class="btn" type="button" id="ed-pausar">Pausar publicación</button>
+    <p class="ayuda" id="ed-pausar-msg">Lo oculta de la tienda sin borrarlo. Lo reactivas cuando quieras.</p>
+    <button class="btn peligro" type="button" id="ed-borrar" hidden>Eliminar perfume</button>
     <div class="hoja-pie">
       <button class="btn" type="button" data-cerrar>Cancelar</button>
       <button class="btn primario" type="submit">Guardar</button>
@@ -213,6 +217,6 @@
 <script src="ajustes.js"></script>
 <script src="js/tema.js"></script>
 <script src="js/frascos.js?v=2.1"></script>
-<script src="js/admin.js?v=1.6"></script>
+<script src="js/admin.js?v=1.8"></script>
 </body>
 </html>

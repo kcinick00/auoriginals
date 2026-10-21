@@ -164,3 +164,12 @@ svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke
 .ap-col b{font-weight:500;font-size:13px}.ap-col small{font-size:11px;color:var(--muted);line-height:1.25}
 .ap-col .hex{width:100%;font:13px ui-monospace,Menlo,monospace;letter-spacing:.04em;text-transform:uppercase;padding:8px;border:1px solid var(--line-strong);border-radius:8px;background:var(--bg-2);color:var(--fg)}
 #ap-c-reset{margin-bottom:6px}
+
+/* v1.6 · eliminar perfume */
+#ed-borrar{width:100%;margin-top:14px;border-color:rgba(240,120,120,.5);color:#F09090}
+#ed-borrar:hover{background:rgba(240,120,120,.12);border-color:#F09090}
+
+/* v1.7 · publicación pausada */
+.fila.pausada .th,.fila.pausada .dat{opacity:.5}
+#ed-pausar{width:100%;margin-top:14px}
+#ed-pausar-msg{margin:6px 0 0}

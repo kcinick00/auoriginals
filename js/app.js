@@ -7,7 +7,7 @@
 
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const PRODUCTOS = CATALOGO.map((p, i) => Object.assign({ orden: i }, p));
+  const PRODUCTOS = CATALOGO.filter(p => !p.oculto).map((p, i) => Object.assign({ orden: i }, p));
   const PORID = Object.fromEntries(PRODUCTOS.map(p => [p.id, p]));
   // Tasa euro BCV: arranca con la última guardada (o la de config.js) y se actualiza en línea.
   let TASA = Number(CONFIG.tasaBs) || 0;
