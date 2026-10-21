@@ -226,6 +226,37 @@
     $('#ed-prev').innerHTML = data ? `<img src="${esc(data)}" alt="Foto del perfume">` : Frascos.svg(Object.assign({}, p, { id: p.id || 'nuevo' }), { decorativo: true });
   }
 
+  // ---- notas, perfil olfativo y alternativa ----
+  const PERF0 = 'F|2|T|DN';
+  const perfilDe = p => (p && p.perfil) || (typeof PERFILES !== 'undefined' && p && PERFILES[p.id]) || PERF0;
+  const altDe = p => (p && p.alternativa) || (typeof ALTERNATIVAS !== 'undefined' && p && ALTERNATIVAS[p.id]) || '';
+  function pintarOlf(p, nuevo) {
+    const [f, pr, c, u] = perfilDe(nuevo ? null : p).split('|'), uso = u === 'T' ? 'DNS' : u;
+    $('#ed-notas').value = p.notas || ''; $('#ed-fam1').value = f[0]; $('#ed-fam2').value = f[1] || '';
+    $('#ed-proy').value = pr; $('#ed-clima').value = c;
+    ['D', 'N', 'S'].forEach(k => $('#ed-uso-' + k).checked = uso.includes(k));
+    const otros = todos().filter(x => x.id !== p.id).sort((a, b) => (a.marca + a.nombre).localeCompare(b.marca + b.nombre, 'es'));
+    $('#ed-alt').innerHTML = '<option value="">Automática (la tienda elige una parecida y más barata)</option><option value="ninguna">Ninguna (no mostrar alternativa)</option>' +
+      otros.map(x => `<option value="${esc(x.id)}">${esc(x.marca)} · ${esc(x.nombre)} ($${precioTxt(x.precio)})</option>`).join('');
+    $('#ed-alt').value = nuevo ? '' : altDe(p);
+    if ($('#ed-alt').value !== (nuevo ? '' : altDe(p))) $('#ed-alt').value = '';
+    $('#ed-olf').open = false;
+  }
+  function leerOlf(id) {
+    const f = $('#ed-fam1').value + ($('#ed-fam2').value && $('#ed-fam2').value !== $('#ed-fam1').value ? $('#ed-fam2').value : '');
+    const uso = ['D', 'N', 'S'].filter(k => $('#ed-uso-' + k).checked).join('') || 'D';
+    const perfil = [f, $('#ed-proy').value, $('#ed-clima').value, uso].join('|');
+    const norm = x => String(x || '').replace(/\|T$/, '|DNS');
+    const porDefecto = norm(typeof PERFILES !== 'undefined' && id && PERFILES[id]);
+    const altDef = (typeof ALTERNATIVAS !== 'undefined' && id && ALTERNATIVAS[id]) || '';
+    const v = $('#ed-alt').value;
+    return {
+      notas: $('#ed-notas').value.trim() || undefined,
+      perfil: perfil === (porDefecto || norm(PERF0)) ? undefined : perfil,           // igual al de perfiles.js (o al neutro): no se guarda
+      alternativa: v === altDef ? undefined : (v || 'auto'),                          // 'auto' = anula la de perfiles.js y deja que la tienda elija
+    };
+  }
+
   function abrirEditor(id) {
     const nuevo = id === null;
     const p = nuevo ? { id: '', marca: '', nombre: '', presentacion: 'Eau de Parfum', tamano: '100 ml', genero: 'Hombre', stock: 1, precio: 0, imagen: '' } : todos().find(x => x.id === id);
@@ -236,7 +267,7 @@
     $('#ed-marca').value = p.marca; $('#ed-nombre').value = p.nombre; $('#ed-pres').value = p.presentacion;
     $('#ed-tamano').value = p.tamano; $('#ed-genero').value = p.genero; $('#ed-precio').value = nuevo ? '' : precioTxt(p.precio); $('#ed-stock').value = p.stock;
     $('#ed-file').value = ''; $('#ed-foto-msg').textContent = 'Mejor con la botella sola, de frente y sobre fondo blanco.';
-    $('#ed-error').hidden = true; pintarPrev();
+    $('#ed-error').hidden = true; pintarPrev(); pintarOlf(p, nuevo);
     dlgEd.showModal();
   }
 
@@ -267,6 +298,7 @@
     if (precio === null) return err('Escribe un precio válido, por ejemplo 55 o 49.5.');
     if (stock === null) return err('Las existencias deben ser un número entero (0 si está agotado).');
     const datos = { marca, nombre, presentacion: $('#ed-pres').value, tamano: $('#ed-tamano').value.trim() || '100 ml', genero: $('#ed-genero').value, precio, stock };
+    Object.assign(datos, leerOlf(ed.id));
     let id = ed.id;
     if (ed.nuevo) {
       id = slug(marca + '-' + nombre); let k = 2; const usados = new Set(todos().map(x => x.id));

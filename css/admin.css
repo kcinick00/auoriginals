@@ -173,3 +173,12 @@ svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke
 .fila.pausada .th,.fila.pausada .dat{opacity:.5}
 #ed-pausar{width:100%;margin-top:14px}
 #ed-pausar-msg{margin:6px 0 0}
+
+/* v1.8 · notas, perfil y alternativa */
+.ed-olf{margin:14px 0 0;border:1px solid var(--line);border-radius:12px;padding:0 14px}
+.ed-olf summary{cursor:pointer;padding:14px 0;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.ed-olf[open] summary{border-bottom:1px solid var(--line);margin-bottom:12px}
+.ed-olf .ancho{grid-column:1/-1}
+.ed-olf>.ancho{display:flex;flex-direction:column;gap:6px;margin:12px 0 14px}
+.ed-uso{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;margin:12px 0}
+.ed-uso>span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);width:100%}

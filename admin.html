@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css?v=1.7">
+<link rel="stylesheet" href="css/admin.css?v=1.8">
 </head>
 <body>
 
@@ -97,6 +97,34 @@
       <label>Precio ($)<input id="ed-precio" inputmode="decimal" autocomplete="off"></label>
       <label>Existencias<input id="ed-stock" inputmode="numeric" autocomplete="off"></label>
     </div>
+    <details class="ed-olf" id="ed-olf">
+      <summary>Notas, perfil olfativo y alternativa</summary>
+      <p class="ayuda">Esto lo usan el quiz «Encuentra tu perfume ideal» y la sugerencia «Alternativa similar a menor precio».</p>
+      <div class="campos">
+        <label class="ancho">Notas (se muestran en la ficha)<input id="ed-notas" placeholder="Bergamota, vainilla, ámbar…" autocomplete="off"></label>
+        <label>Aroma principal
+          <select id="ed-fam1"><option value="F">Fresco, cítrico, marino</option><option value="D">Dulce, vainilla, ámbar</option><option value="M">Maderas, especias, cuero</option><option value="R">Floral</option></select>
+        </label>
+        <label>Aroma secundario
+          <select id="ed-fam2"><option value="">Ninguno</option><option value="F">Fresco, cítrico, marino</option><option value="D">Dulce, vainilla, ámbar</option><option value="M">Maderas, especias, cuero</option><option value="R">Floral</option></select>
+        </label>
+        <label>Proyección
+          <select id="ed-proy"><option value="3">Alta (se siente a distancia)</option><option value="2">Media (elegancia cercana)</option><option value="1">Suave</option></select>
+        </label>
+        <label>Clima
+          <select id="ed-clima"><option value="C">Cálido</option><option value="F">Frío</option><option value="T">Templado</option></select>
+        </label>
+      </div>
+      <div class="ed-uso" role="group" aria-label="Momento de uso">
+        <span>Se usa para</span>
+        <label class="check"><input type="checkbox" id="ed-uso-D"> Día / trabajo</label>
+        <label class="check"><input type="checkbox" id="ed-uso-N"> Noche / eventos</label>
+        <label class="check"><input type="checkbox" id="ed-uso-S"> Deporte / calor</label>
+      </div>
+      <label class="ancho">Alternativa a menor precio
+        <select id="ed-alt"></select>
+      </label>
+    </details>
     <p class="error" id="ed-error" hidden></p>
     <button class="btn" type="button" id="ed-pausar">Pausar publicación</button>
     <p class="ayuda" id="ed-pausar-msg">Lo oculta de la tienda sin borrarlo. Lo reactivas cuando quieras.</p>
@@ -216,7 +244,8 @@
 <script src="catalogo.js?v=3"></script>
 <script src="ajustes.js"></script>
 <script src="js/tema.js"></script>
+<script src="perfiles.js?v=1.1"></script>
 <script src="js/frascos.js?v=2.1"></script>
-<script src="js/admin.js?v=1.8"></script>
+<script src="js/admin.js?v=1.9"></script>
 </body>
 </html>

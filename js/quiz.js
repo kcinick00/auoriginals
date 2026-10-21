@@ -58,8 +58,9 @@
   let paso = 0, resp = {}, resultado = null;
 
   // ---------- puntuación ----------
+  const tienePerfil = p => !!(p.perfil || PERFILES[p.id]);
   function perfil(p) {
-    const s = PERFILES[p.id];
+    const s = p.perfil || PERFILES[p.id];
     if (!s) return { fam: p.genero === 'Mujer' ? 'RD' : 'FM', proy: 2, clima: 'T', uso: 'DNS', neutro: true };
     const [f, pr, c, u] = s.split('|');
     return { fam: f, proy: +pr, clima: c, uso: u === 'T' ? 'DNS' : u };
@@ -189,4 +190,39 @@
   document.addEventListener('keydown', e => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('q-alt')) { e.preventDefault(); A.abrirFicha(e.target.dataset.id); }
   });
+  // ---------- "alternativa similar a menor precio" en la ficha ----------
+  const ALT = typeof ALTERNATIVAS !== 'undefined' ? ALTERNATIVAS : {};   // {id: id-de-la-alternativa} para elegirla a mano
+  function similitud(a, b) {
+    let s = 0;
+    if (a.fam[0] === b.fam[0]) s += 4; else if (a.fam[0] === b.fam[1] || a.fam[1] === b.fam[0]) s += 2;
+    if (a.fam[1] && a.fam[1] === b.fam[1]) s += 1;
+    const dp = Math.abs(a.proy - b.proy); s += dp === 0 ? 2 : dp === 1 ? 1 : 0;
+    s += a.clima === b.clima ? 2 : (a.clima === 'T' || b.clima === 'T') ? 1 : 0;
+    if ([...a.uso].some(u => b.uso.includes(u))) s += 2;
+    return s;
+  }
+  function alternativaDe(p) {
+    const elegida = p.alternativa || ALT[p.id];
+    if (elegida === 'ninguna') return null;
+    const man = elegida && elegida !== 'auto' && A.PRODUCTOS.find(x => x.id === elegida && x.stock > 0);
+    if (man) return man;
+    if (!tienePerfil(p) || p.precio < 45) return null;                  // solo tiene sentido en perfumes de precio alto
+    const pa = perfil(p);
+    const c = A.PRODUCTOS.filter(x => x.id !== p.id && x.stock > 0 && tienePerfil(x) && (x.genero === p.genero || x.genero === 'Unisex' || p.genero === 'Unisex')
+      && x.precio <= p.precio * 0.8 && p.precio - x.precio >= 10)
+      .map(x => ({ x, s: similitud(pa, perfil(x)) })).filter(o => o.s >= 9 && perfil(o.x).fam[0] === pa.fam[0]);   // misma familia principal
+    c.sort((a, b) => b.s - a.s || a.x.precio - b.x.precio);
+    return c.length ? c[0].x : null;
+  }
+  window.AU_ficha = function (p) {
+    const box = $('#ficha-alt'); if (!box) return;
+    const alt = alternativaDe(p);
+    if (!alt) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
+    box.innerHTML = `<span class="fa-t">Alternativa similar a menor precio</span>
+      <button type="button" class="fa-b" data-alt="${alt.id}"><span><b>${A.esc(alt.marca)} · ${A.esc(alt.nombre)}</b><small>${A.esc(alt.presentacion)} · ${A.esc(alt.tamano)}</small></span><span class="fa-p">${A.fmtUSD(alt.precio)}<small>ahorras ${A.fmtUSD(Math.round((p.precio - alt.precio) * 100) / 100)}</small></span></button>
+      <p class="fa-n">Es un perfume distinto, con un perfil olfativo parecido. No es una copia ni tiene el mismo aroma exacto.</p>`;
+  };
+  document.addEventListener('click', e => { const b = e.target.closest('[data-alt]'); if (b) A.abrirFicha(b.dataset.alt); });
+
 })();

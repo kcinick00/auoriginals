@@ -217,12 +217,13 @@
     $('#ficha-nombre').textContent = p.nombre;
     $('#ficha-datos').innerHTML = `
       <dt>Concentración</dt><dd>${esc(p.presentacion)}</dd>
-      <dt>Contenido</dt><dd>${esc(p.tamano)}</dd>
+      <dt>Contenido</dt><dd>${esc(p.tamano)}</dd>${p.notas ? `\n      <dt>Notas</dt><dd>${esc(p.notas)}</dd>` : ''}
       <dt>Colección</dt><dd>${p.genero === 'Hombre' ? 'Ellos · Hombre' : p.genero === 'Mujer' ? 'Ellas · Mujer' : 'Unisex'}</dd>${p.stock <= 0 ? '\n      <dt>Disponible</dt><dd>Agotado</dd>' : ''}`;
     $('#ficha-precio').innerHTML = precioHTML(p, true);
     actualizarBotonFicha();
     $('#ficha-wa').href = waURL(`${CONFIG.saludo}\nMe interesa: ${p.marca} · ${p.nombre} (${p.presentacion} ${p.tamano}) · ${fmtUSD(p.precio)}\n¿Sigue disponible?`);
     abrirCapa('ficha');
+    if (window.AU_ficha) window.AU_ficha(p);
   }
   function actualizarBotonFicha() {
     const p = PORID[fichaId]; if (!p) return;
