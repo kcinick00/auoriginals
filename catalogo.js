@@ -107,5 +107,6 @@ const CATALOGO = [
   {"id":"armaf-club-de-nuit-iconic","marca":"Armaf","nombre":"Club de nuit Iconic","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Hombre","stock":1,"precio":100,"imagen":"images/perfumes/armaf-club-de-nuit-iconic-mv9wnkh5.jpg"},
   {"id":"perry-ellis-360-red","marca":"Perry Ellis","nombre":"360° red","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Mujer","stock":1,"precio":65,"imagen":"images/perfumes/perry-ellis-360-red-mv9wvmlq.jpg"},
   {"id":"perry-ellis-360-red-2","marca":"Perry Ellis","nombre":"360° red","presentacion":"Set de regalo EDP","tamano":"100 ml","genero":"Hombre","stock":1,"precio":75,"imagen":"images/perfumes/perry-ellis-360-red-2-mv9wvoiw.jpg"},
-  {"id":"guess-marciano","marca":"Guess","nombre":"Marciano","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Mujer","stock":1,"precio":50,"imagen":"images/perfumes/guess-marciano-mvij3iyj.png"}
+  {"id":"guess-marciano","marca":"Guess","nombre":"Marciano","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Mujer","stock":1,"precio":50,"imagen":"images/perfumes/guess-marciano-mvij3iyj.png"},
+  {"id":"guess-clasico-rosado","marca":"Guess","nombre":"Clasico rosado","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Mujer","stock":1,"precio":50,"imagen":""}
 ];
