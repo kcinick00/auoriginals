@@ -527,7 +527,7 @@ ${filas.join(',\n')}
     $('#ap-paletas').innerHTML = pal.join('');
     pintarColores();
     $('#ap-f-tit').value = ap.fuenteTitulos; $('#ap-f-txt').value = ap.fuenteTexto;
-    $('#ap-m-carrusel').checked = ap.mostrar.carrusel !== false; $('#ap-m-casas').checked = ap.mostrar.casas !== false; $('#ap-m-datos').checked = ap.mostrar.datos !== false;
+    $('#ap-m-carrusel').checked = ap.mostrar.carrusel !== false; $('#ap-m-casas').checked = ap.mostrar.casas !== false; $('#ap-m-datos').checked = ap.mostrar.datos !== false; $('#ap-m-alternativas').checked = ap.mostrar.alternativas !== false;
     $('#ap-t-eyebrow').value = ap.textos.eyebrow || ''; $('#ap-t-lead').value = ap.textos.lead || '';
   }
   (function opcionesFuentes() {
@@ -567,7 +567,7 @@ ${filas.join(',\n')}
   $('#ap-c-reset').addEventListener('click', () => { ap.colores = {}; pintarColores(); vistaPrevia(); });
   $('#ap-f-tit').addEventListener('change', e => { ap.fuenteTitulos = e.target.value; vistaPrevia(); });
   $('#ap-f-txt').addEventListener('change', e => { ap.fuenteTexto = e.target.value; vistaPrevia(); });
-  [['carrusel', '#ap-m-carrusel'], ['casas', '#ap-m-casas'], ['datos', '#ap-m-datos']].forEach(([k, s]) => $(s).addEventListener('change', e => { ap.mostrar[k] = e.target.checked; vistaPrevia(); }));
+  [['carrusel', '#ap-m-carrusel'], ['casas', '#ap-m-casas'], ['datos', '#ap-m-datos'], ['alternativas', '#ap-m-alternativas']].forEach(([k, s]) => $(s).addEventListener('change', e => { ap.mostrar[k] = e.target.checked; vistaPrevia(); }));
   $('#ap-t-eyebrow').addEventListener('input', e => { ap.textos.eyebrow = e.target.value; vistaPrevia(); });
   $('#ap-t-lead').addEventListener('input', e => { ap.textos.lead = e.target.value; vistaPrevia(); });
   $('#ap-original').addEventListener('click', () => { if (!confirm('¿Volver al diseño original? Se restauran modelo, logo, colores, letras y textos (aún no se publica).')) return; ap = TEMA.fusionar({}); pintarControles(); vistaPrevia(); toast('Diseño original listo. Toca Publicar apariencia para aplicarlo'); });
@@ -575,7 +575,7 @@ ${filas.join(',\n')}
 
   function ajustesLimpios() {
     const o = { modelo: ap.modelo, logo: ap.logo, paleta: ap.paleta, colores: ap.colores || {}, fuenteTitulos: ap.fuenteTitulos, fuenteTexto: ap.fuenteTexto,
-      mostrar: { carrusel: ap.mostrar.carrusel !== false, casas: ap.mostrar.casas !== false, datos: ap.mostrar.datos !== false },
+      mostrar: { carrusel: ap.mostrar.carrusel !== false, casas: ap.mostrar.casas !== false, datos: ap.mostrar.datos !== false, alternativas: ap.mostrar.alternativas !== false },
       textos: { eyebrow: String(ap.textos.eyebrow || '').trim(), lead: String(ap.textos.lead || '').trim() } };
     return o;
   }

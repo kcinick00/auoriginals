@@ -41,7 +41,7 @@
     'frasco':    { nombre: 'Frasco',    desc: 'El diseño anterior (frasco con letras AU).',               img: 'images/logos/frasco.svg' },
   };
   const DEFECTO = { modelo: 'sello', logo: 'emblema', paleta: 'violeta', colores: {}, fuenteTitulos: 'Roboto', fuenteTexto: 'Roboto',
-    mostrar: { carrusel: true, casas: true, datos: true }, textos: { eyebrow: '', lead: '' } };
+    mostrar: { carrusel: true, casas: true, datos: true, alternativas: true }, textos: { eyebrow: '', lead: '' } };
   const fusionar = aj => { aj = aj || {}; const r = Object.assign({}, DEFECTO, aj); r.mostrar = Object.assign({}, DEFECTO.mostrar, aj.mostrar); r.textos = Object.assign({}, DEFECTO.textos, aj.textos); r.colores = aj.colores || {}; if (r.paleta === 'personalizada') r.paleta = 'violeta'; return r; };
 
   const hex = h => { h = String(h || '').replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); const n = parseInt(h, 16); return isFinite(n) && h.length === 6 ? [n >> 16 & 255, n >> 8 & 255, n & 255] : [0, 0, 0]; };
@@ -67,7 +67,7 @@
     const bg = ok('fondo') || p.bg, fg = ok('texto') || p.fg, a = ok('acento') || p.a, b = ok('acento2') || p.b;
     return { bg: bg, fg: fg, a: a, b: b,
       c: ok('detalle') || (ok('acento2') ? mezcla(b, lum(bg) > .5 ? '#000000' : '#FFFFFF', .35) : p.c),
-      sup: ok('tarjetas'), logo: ok('logo') || a, tit: ok('titulo') || fg };
+      sup: ok('tarjetas'), logo: ok('logo') || a, tit: ok('titulo') || a, titSet: ok('titulo') };
   }
 
   function variables(aj) {
@@ -89,6 +89,7 @@
       '--logo-img': 'url("../' + (LOGOS[aj.logo] || LOGOS.emblema).img + '")',  // relativa a css/styles.css
       '--f-display': fam(aj.fuenteTitulos), '--f-sans': fam(aj.fuenteTexto),
     };
+    if (p.titSet) v['--tit-txt'] = p.titSet;
     if (p.sup) { v['--surface'] = p.sup; v['--surface-2'] = mezcla(p.sup, p.fg, claro ? .08 : .08); v['--surface-rgb'] = rgb(p.sup); }
     return { vars: v, claro: claro, bg: p.bg };
   }

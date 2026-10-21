@@ -3,7 +3,7 @@
 // Cada vez que subas cambios (precios, catálogo, diseño), sube este número
 // para que los clientes reciban la versión nueva enseguida.
 // =========================================================
-const CACHE_NAME = "au-originals-v5.5";
+const CACHE_NAME = "au-originals-v5.6";
 
 const FILES_TO_CACHE = [
   "./",

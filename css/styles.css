@@ -459,7 +459,7 @@ html[data-modelo="compacto"] .hero-acciones{margin-top:22px}
 html[data-modelo="compacto"] .seccion{padding-block:64px}
 
 /* Elementos que se pueden ocultar desde el panel admin */
-html[data-ocultar~="carrusel"] #destacados,html[data-ocultar~="casas"] .casas,html[data-ocultar~="datos"] .hero-datos{display:none}
+html[data-ocultar~="carrusel"] #destacados,html[data-ocultar~="casas"] .casas,html[data-ocultar~="datos"] .hero-datos,html[data-ocultar~="alternativas"] #ficha-alt{display:none!important}
 
 /* logo elegido: los redondos necesitan más tamaño en la portada */
 html[data-logo="circulo"] .sello-logo{width:52%;aspect-ratio:1}
@@ -519,3 +519,12 @@ h2,h3{color:var(--tit-txt,inherit)}
 .q-fin{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
 @media (max-width:640px){.q-match{grid-template-columns:1fr}.q-match .card-vis{min-height:0;height:270px;aspect-ratio:auto}.q-alts{gap:8px}}
 @media (prefers-reduced-motion:reduce){.q-pregunta{animation:none}.quiz{transition:none}}
+
+/* ---------- Alternativa similar (ficha) ---------- */
+.ficha-alt{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.fa-t{display:block;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.fa-b{width:100%;display:flex;justify-content:space-between;align-items:center;gap:14px;text-align:left;border:1px solid var(--line-strong);border-radius:12px;padding:12px 14px;background:rgba(var(--surface-rgb),.5);cursor:pointer;transition:border-color .25s}
+.fa-b:hover{border-color:var(--gold)}
+.fa-b b{display:block;font-weight:400;font-size:15px;line-height:1.25}.fa-b small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.fa-p{text-align:right;font-family:var(--f-display);font-size:22px;white-space:nowrap}.fa-p small{font-family:var(--f-sans);color:var(--ok)}
+.fa-n{margin:8px 0 0;font-size:12px;color:var(--muted)}
