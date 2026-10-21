@@ -3,7 +3,7 @@
 // Cada vez que subas cambios (precios, catálogo, diseño), sube este número
 // para que los clientes reciban la versión nueva enseguida.
 // =========================================================
-const CACHE_NAME = "au-originals-v5.2";
+const CACHE_NAME = "au-originals-v5.3";
 
 const FILES_TO_CACHE = [
   "./",
@@ -13,6 +13,8 @@ const FILES_TO_CACHE = [
   "css/styles.css",
   "js/frascos.js",
   "js/app.js",
+  "js/quiz.js",
+  "perfiles.js",
   "manifest.json",
   "icon-192.png",
   "images/logos/emblema.svg",
@@ -47,7 +49,7 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
   // El catálogo y la config siempre se piden frescos (los edita el panel admin).
-  const fresco = /\/(catalogo|config|ajustes)\.js$/.test(new URL(req.url).pathname);
+  const fresco = /\/(catalogo|config|ajustes|perfiles)\.js$/.test(new URL(req.url).pathname);
   event.respondWith(
     fetch(req, fresco ? { cache: "no-cache" } : undefined)
       .then((res) => {

@@ -299,14 +299,14 @@
     focoPrevio = document.activeElement;
     cerrarCapa(true);
     capaActiva = cual;
-    const el = cual === 'bolsa' ? $('#panel-bolsa') : $('#ficha');
+    const el = cual === 'bolsa' ? $('#panel-bolsa') : cual === 'quiz' ? $('#quiz') : $('#ficha');
     el.classList.add('on'); el.setAttribute('aria-hidden', 'false');
-    $('#velo').classList.add('on');
+    if (cual !== 'quiz') $('#velo').classList.add('on');
     document.body.style.overflow = 'hidden';
     setTimeout(() => { const c = el.querySelector('[data-cerrar]'); c && c.focus(); }, 50);
   }
   function cerrarCapa(silencioso) {
-    ['#panel-bolsa', '#ficha'].forEach(s => { $(s).classList.remove('on'); $(s).setAttribute('aria-hidden', 'true'); });
+    ['#panel-bolsa', '#ficha', '#quiz'].forEach(s => { $(s).classList.remove('on'); $(s).setAttribute('aria-hidden', 'true'); });
     $('#velo').classList.remove('on');
     document.body.style.overflow = '';
     if (!silencioso && focoPrevio && focoPrevio.focus) focoPrevio.focus();
@@ -382,6 +382,9 @@
       toast('Abriendo WhatsApp con tu pedido…');
     });
   }
+
+  // API para js/quiz.js
+  window.AU = { PRODUCTOS, DESTACADOS, tarjeta, abrirFicha, agregar, abrirCapa, cerrarCapa, toast, waURL, fmtUSD, esc, abrev, precioHTML, ir: g => { estado.genero = g; render(); } };
 
   // ---------- arranque ----------
   prepararCielo();

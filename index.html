@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=4.1">
+<link rel="stylesheet" href="css/styles.css?v=4.2">
 </head>
 <body>
 
@@ -73,6 +73,7 @@
         <p class="hero-lead" data-t="lead">Encuentra la esencia que conecta con tu personalidad. Selección exclusiva de aromas que cautivan los sentidos: grandes casas europeas, perfumería árabe y ediciones que no se repiten.</p>
         <div class="hero-acciones">
           <a class="btn btn-oro" href="#catalogo">Ver el catálogo</a>
+          <button class="btn" type="button" data-quiz>Encuentra tu perfume ideal</button>
           <a class="btn js-wa" href="#" target="_blank" rel="noopener">Asesoría por WhatsApp</a>
         </div>
         <div class="hero-datos">
@@ -94,6 +95,18 @@
   </section>
 
   <div class="casas" aria-hidden="true"><div class="casas-pista" id="casas-pista"></div></div>
+
+  <!-- ===== QUIZ ===== -->
+  <section class="quizband" aria-label="Quiz de perfumes">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Quiz olfativo</span>
+        <h2>¿No sabes cuál <em>elegir</em>?</h2>
+        <p>Responde 5 preguntas rápidas y te recomendamos el perfume que va contigo.</p>
+      </div>
+      <button class="btn btn-oro" type="button" data-quiz>Encuentra tu perfume ideal</button>
+    </div>
+  </section>
 
   <!-- ===== COLECCIONES ===== -->
   <section class="seccion destacados" id="destacados">
@@ -308,11 +321,22 @@
 </div>
 
 <button class="fab" id="fab" type="button"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span id="fab-txt">Bolsa</span></button>
+<div class="quiz" id="quiz" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Encuentra tu perfume ideal">
+  <div class="quiz-cab">
+    <button class="quiz-atras" type="button" id="quiz-atras" aria-label="Pregunta anterior" hidden><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="quiz-prog"><span id="quiz-paso"></span><div class="quiz-barra"><i id="quiz-barra"></i></div></div>
+    <button class="cerrar" type="button" data-cerrar aria-label="Cerrar quiz"><svg viewBox="0 0 14 14"><path d="M1 1l12 12M13 1L1 13"/></svg></button>
+  </div>
+  <div class="quiz-cuerpo" id="quiz-cuerpo"></div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="config.js?v=2.1"></script>
+<script src="perfiles.js?v=1"></script>
 <script src="catalogo.js?v=2.1"></script>
 <script src="js/frascos.js?v=2.1"></script>
-<script src="js/app.js?v=4.2"></script>
+<script src="js/app.js?v=4.3"></script>
+<script src="js/quiz.js?v=1.1"></script>
 </body>
 </html>
