@@ -8,4 +8,4 @@
 //  - fuenteTitulos / fuenteTexto: nombre de una fuente de Google Fonts (ver js/tema.js)
 //  - mostrar:  { carrusel, casas, datos }   ·   textos: { eyebrow, lead }
 // =========================================================
-const AJUSTES = {"modelo":"sello","logo":"emblema","paleta":"violeta","colores":{"acento":"#efbf04","logo":"#efbf04"},"fuenteTitulos":"Open Sans","fuenteTexto":"Roboto","mostrar":{"carrusel":true,"casas":true,"datos":true},"textos":{"eyebrow":"","lead":""}};
+const AJUSTES = {"modelo":"sello","logo":"emblema","paleta":"violeta","colores":{"acento":"#efbf04","logo":"#efbf04"},"fuenteTitulos":"Open Sans","fuenteTexto":"Roboto","mostrar":{"carrusel":true,"casas":true,"datos":true,"alternativas":false},"textos":{"eyebrow":"","lead":""}};
