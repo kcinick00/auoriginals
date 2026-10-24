@@ -111,5 +111,6 @@ const CATALOGO = [
   {"id":"joseph-prive-flaunt-pour-femme","marca":"JOSEPH PRIVE","nombre":"FLAUNT POUR FEMME","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Mujer","stock":1,"precio":45,"imagen":"images/perfumes/joseph-prive-flaunt-pour-femme-mvmw8kjv.jpg"},
   {"id":"joseph-prive-flaunt-seduction","marca":"JOSEPH PRIVE","nombre":"FLAUNT SEDUCTION","presentacion":"Eau de Parfum","tamano":"100 ml","genero":"Mujer","stock":1,"precio":45,"imagen":"images/perfumes/joseph-prive-flaunt-seduction-mvmwd254.jpg"},
   {"id":"benetton-colors-rose","marca":"Benetton","nombre":"COLORS ROSE","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Mujer","stock":1,"precio":35,"imagen":"images/perfumes/benetton-colors-rose-mvmwj0oh.jpg","perfil":"RF|1|T|D"},
-  {"id":"benetton-cold","marca":"BENETTON","nombre":"COLD","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/benetton-cold-mvmwlxxg.jpg","perfil":"F|2|T|D"}
+  {"id":"benetton-cold","marca":"BENETTON","nombre":"COLD","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/benetton-cold-mvmwlxxg.jpg","perfil":"F|2|T|D"},
+  {"id":"cuba-paris-cuba-millestone","marca":"CUBA PARIS","nombre":"CUBA MILLESTONE","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/cuba-paris-cuba-millestone-mvmwvo0g.png"}
 ];
