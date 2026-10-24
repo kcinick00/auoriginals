@@ -113,5 +113,6 @@ const CATALOGO = [
   {"id":"benetton-colors-rose","marca":"Benetton","nombre":"COLORS ROSE","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Mujer","stock":1,"precio":35,"imagen":"images/perfumes/benetton-colors-rose-mvmwj0oh.jpg","perfil":"RF|1|T|D"},
   {"id":"benetton-cold","marca":"BENETTON","nombre":"COLD","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/benetton-cold-mvmwlxxg.jpg","perfil":"F|2|T|D"},
   {"id":"cuba-paris-cuba-millestone","marca":"CUBA PARIS","nombre":"CUBA MILLESTONE","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/cuba-paris-cuba-millestone-mvmwvo0g.png"},
-  {"id":"cuba-paris-cuba-black","marca":"CUBA PARIS","nombre":"CUBA BLACK","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/cuba-paris-cuba-black-mvmwxzds.png"}
+  {"id":"cuba-paris-cuba-black","marca":"CUBA PARIS","nombre":"CUBA BLACK","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/cuba-paris-cuba-black-mvmwxzds.png"},
+  {"id":"cuba-paris-cuba-fortune","marca":"CUBA PARIS","nombre":"CUBA FORTUNE","presentacion":"Eau de Toilette","tamano":"100 ml","genero":"Hombre","stock":1,"precio":25,"imagen":"images/perfumes/cuba-paris-cuba-fortune-mvmx04qd.png"}
 ];
